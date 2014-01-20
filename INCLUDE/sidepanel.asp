@@ -123,6 +123,6 @@
 <div class="sidebox sideboxActive">
 	<div class="sideboxHeader">最新活动</div>
 	<div class="sideboxBody" id="divActive">
-	    <a target="_blank" href="http://www.weibo.com/p/1006061875486974/app1881378925"><img width="100%" src="<#ZC_BLOG_HOST#>IMAGE/BANNER/b1.gif"></a>
+	    <a target="_blank" href="http://www.eau-thermale-avene.cn/cosmetic-sterile/"><img width="100%" src="<#ZC_BLOG_HOST#>IMAGE/BANNER/b1.jpg"></a>
 	</div>
 </div>
