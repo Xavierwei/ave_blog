@@ -1,0 +1,66 @@
+﻿<div class="post cate<#article/category/id#> auth<#article/author/id#>">
+	<div class="post-nav"><#template:article_navbar_l#><#template:article_navbar_r#></div>
+	<div class="clear"></div>
+	<div class="post-box"> 
+		<h2 class="post-title"><span class="post-date"><#article/posttime#></span><#article/title#></h2>
+		<div class="post-body"><#article/content#>
+			 
+			 <div class="post-info"> 
+				 <h5 class="post-tags"><#ZC_MSG138#>: <#template:article_tag#></h5>
+				 <div class="post-share">
+					<!-- JiaThis Button BEGIN -->
+					<div id="ckepop">
+						<span class="jiathis_txt">分享到：</span> <a class="jiathis_button_tsina"></a><a class="jiathis_button_renren"></a><a class="jiathis_button_kaixin001"></a>
+						  <script type="text/javascript">
+							  var jiathis_config = {
+								 data_track_clickback: true,
+					   title: "@雅漾 我在雅漾官网Blog上看到一篇有意思的文章，分享给大家！<#article/title#>",
+								 pic: "http://www.eau-thermale-avene.cn/images/default/Avene_SNS_logo.jpg"
+							  };
+						  </script>
+						  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1559426" charset="utf-8"></script>
+					</div>
+					<!-- JiaThis Button END -->
+				</div>
+			</div>
+
+			<h6 class="post-footer">
+				<div class="post-footer-left">
+				<div class="post-footer-browsenums">
+						已有<span id="spn<#article/id#>"></span>人阅读过本文<!--<#ZC_MSG130#>:-->
+						<script language="JavaScript" type="text/javascript">strBatchCount+="spn<#article/id#>=<#article/id#>,"</script>
+					</div> 
+					  <div class="post-footer-trackbacknums">
+						本文已被转载<!--<script type="text/javascript" src="<#ZC_BLOG_SUB_NAME#>/sso/jiathis.aspx?url=<#article/url#>&js=1"></script>-->次<!--<#ZC_MSG014#>:<#article/trackbacknums#>-->
+
+					</div> 
+				</div>
+				<div class="post-footer-right">
+					<div class="post-footer-commnums">
+						目前有<#article/commnums#>人对本文发表评论<!--<#ZC_MSG013#>:-->
+					</div> 
+					<div class="post-footer-category">
+						分类：<#article/category/name#><!--<#ZC_MSG012#>:-->
+					</div> 
+				</div>
+
+			
+				<!--<#ZC_MSG011#>:<#article/author/name#> | <#ZC_MSG012#>:<#article/category/name#> | <#ZC_MSG013#>:<#article/commnums#> | <#ZC_MSG014#>:<#article/trackbacknums#> | <#ZC_MSG130#>:<span id="spn<#article/id#>"></span>
+				<script language="JavaScript" type="text/javascript">strBatchCount+="spn<#article/id#>=<#article/id#>,"</script>-->
+			</h6>
+		</div>
+		
+	</div>
+</div>
+<!-- <ul class="msg trackback">
+	<li class="tbname"><a href="<#article/pretrackback_url#>" target="_blank"><#ZC_MSG232#></a></li>
+</ul>
+<ul class="msg mutuality">
+	<li class="tbname"><#ZC_MSG231#>:</li>
+	<li class="msgarticle"><#template:article_mutuality#></li>
+</ul>-->
+<#template:article_trackback#>
+<div class="msg-boxes">
+	<#template:article_comment#>
+</div>
+<#template:article_commentpost#>

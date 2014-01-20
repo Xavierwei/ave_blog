@@ -1,0 +1,2 @@
+﻿<li><a href="atom.xml" target="_blank"><img src="image/logo/atom.gif" height="14" width="41" border="0" alt="订阅本站的 ATOM 1.0 新闻聚合" /></a></li>
+<li><a href="rss.xml" target="_blank"><img src="image/logo/xml.gif" height="14" width="36" border="0" alt="订阅本站的 RSS 2.0 新闻聚合" /></a></li>

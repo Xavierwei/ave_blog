@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<#ZC_BLOG_LANGUAGE#>" lang="<#ZC_BLOG_LANGUAGE#>">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta http-equiv="Content-Language" content="<#ZC_BLOG_LANGUAGE#>" />
+	<title><#ZC_BLOG_TITLE#><#ZC_MSG044#><#BlogTitle#></title>
+
+    	
+	<script src="<#ZC_BLOG_HOST#>THEMES/avene/TEMPLATE/script/jquery.js" type="text/javascript"></script>
+ 
+
+	<meta name="generator" content="Z-Blog <#ZC_BLOG_VERSION#>" />
+	<link rel="stylesheet" rev="stylesheet" href="<#ZC_BLOG_HOST#>themes/<#ZC_BLOG_THEME#>/source/style.css.asp" type="text/css" media="screen" />
+	<link rel="alternate" type="application/rss+xml" href="<#ZC_BLOG_HOST#>rss.xml" title="<#ZC_BLOG_TITLE#>" />
+	<script src="<#ZC_BLOG_HOST#>script/common.js" type="text/javascript"></script>
+	<script src="<#ZC_BLOG_HOST#>function/c_html_js_add.asp" type="text/javascript"></script>
+	
+	<link rel="stylesheet" type="text/css" href="<#ZC_BLOG_HOST#>/CSS/V2default.css" media="all" />
+
+<!--open all links in new window
+ 	<script language="JavaScript" type="text/javascript">
+		$(document).ready(function(){ 
+		try{
+		$("body a").each(function(){$(this).attr("target","_blank");});
+		}catch(e){};
+		});
+	</script> -->
+
+<script type="text/javascript" src="<#ZC_BLOG_HOST#>themes/<#ZC_BLOG_THEME#>/script/sidebar.js" ></script>
+<link rel="stylesheet" type="text/css" href="<#ZC_BLOG_HOST#>THEMES/avene/STYLE/default.css" />
+<script src="<#ZC_BLOG_HOST#>THEMES/avene/TEMPLATE/script/encodeToGb2312.js" type="text/javascript"></script>
+<script src="<#ZC_BLOG_HOST#>THEMES/avene/TEMPLATE/script/sso.js" type="text/javascript"></script>
+<script src="<#ZC_BLOG_HOST#>THEMES/avene/TEMPLATE/script/avene-all-min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+    $.get('http://114.80.156.91:8111/THEMES/avene/TEMPLATE/TopMenu/TopMenu.html', function(data) {
+            $('#divtest').html(data);
+        });
+    });
+</script>
+</head>
+<body class="multi search">
+<div id="divAll">
+	<div id="divPage">
+	
+	<!--页面顶部共用信息代码 起始-->
+	<div id="divtest"></div>
+	
+	<!--页面顶部共用信息代码 结束-->  
+
+
+
+
+	<div id="divMiddle">
+		<div id="divTop">
+			<h1 id="BlogTitle"><a href="<#ZC_BLOG_HOST#>"><#ZC_BLOG_NAME#></a></h1>
+			<h2 id="BlogSubTitle"></h2>
+		</div>
+		<div id="divNavBar">
+<h3><#ZC_MSG052#></h3>
+<ul>
+<#CACHE_INCLUDE_NAVBAR#>
+</ul>
+		</div>
+		<div id="divMain">
+<div class="post"><#BlogTitle#></div>
+<#template:article-multi#>
+		</div>
+		<div id="divSidebar">
+
+<div class="function" id="divSearchPanel">
+<h3><!--<#ZC_MSG085#>--></h3>
+<ul>
+<li>
+<form method="post" action="<#ZC_BLOG_HOST#>cmd.asp?act=Search">
+<input type="text" name="edtSearch" id="edtSearch" size="12" />
+<input type="submit" value="<#ZC_MSG087#>" name="btnPost" id="btnPost" />
+</form>
+</li>
+</ul>
+</div>
+
+		</div>
+		<!--		
+		<div id="divBottom">
+			<h3 id="BlogPowerBy">Powered By <a href="http://www.rainbowsoft.org/" title="RainbowSoft Studio Z-Blog" target="_blank">Z-Blog <#ZC_BLOG_VERSION#></a></h3>
+			<h2 id="BlogCopyRight"><#ZC_BLOG_COPYRIGHT#></h2>
+		</div>
+-->
+	</div>
+	</div>
+</div>
+<!-- Google Analytics code start -->
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        _uacct = "UA-20215586-2";
+        urchinTracker();
+    </script>
+
+    <!-- Google Analytics code end --->
+</body>
+</html>

@@ -1,0 +1,53 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+.master_maincontent{
+	overflow:auto;
+	padding-bottom: 50px;
+}
+.master_maincontent ul
+{
+	margin:0;padding:0;
+}
+.master_leftnav
+{
+	float:left;display:block;top:120px;width:211px;height:auto;
+}
+
+.master_leftnav ul 
+{
+   
+float: left;
+width: 155px;
+margin: 0px;
+padding-top: 140px;
+
+list-style: none;
+}
+
+html, body {height: 100%;min-height: 100%;}
+
+.master_wrapper {min-height: 100%;}
+
+.master_maincontent {overflow:auto;
+	padding-bottom: 50px;margin-bottom:40px;}  /* must be same height as the footer */
+
+.footer {position: relative;
+	margin-top: -50px; /* negative value of footer height */
+	height: 50px;
+	clear:both;} 
+
+/*Opera Fix*/
+body:before {
+	content:"";
+	height:100%;
+	float:left;
+	width:0;
+	margin-top:-32767px;
+}
+
+#ndefaulttop-in ul li
+{
+	padding-right:5px;
+}

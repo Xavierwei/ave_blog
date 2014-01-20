@@ -1,0 +1,713 @@
+﻿@charset "utf-8";
+/*==============================
+	Title: Avene  
+	Updated:   
+	Content:  
+
+    * Filename: base.css
+    * Version: 1.0.0 (2008-11-10) YYYY-MM-DD
+    * Website: http://avenetest.abc-myclub.com
+    * Author: Ray Huang (Ray.Huang@nurun.com)
+    * Description: all css
+
+    == STRUCTURE: ==============================
+    * 
+    * 
+    ============================================
+	 word-break:break-all; //强制换行
+*/
+* {}
+html { width:100%; margin:0; padding:0; border:0; background:#fff;}
+body { color:#585858; font-size:12px; font-family:"微软雅黑","宋体",Microsoft YaHei,Arial, Helvetica, sans-serif;}
+/*== reset font ==*/
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td { margin:0; padding:0; }
+table { border-collapse:collapse;/* border-spacing:0; */}
+fieldset, img { border:0; }
+address, caption, cite, code, dfn, em, strong, th, var { font-style:normal; font-weight:normal; }
+li { list-style:none }
+caption, th { text-align:left; }
+h1, h2, h3, h4, h5, h6 { font-size:100%; font-weight:normal; }
+q:before, q:after { content:''; }
+abbr, acronym { border:0; font-variant:normal; }
+sup { vertical-align:text-top; }
+sub { vertical-align:text-bottom; }
+input, textarea, select { font-family:inherit; font-size:inherit; font-weight:inherit; }
+input, textarea, select { *font-size:100%;}
+legend { color:#000; }
+table { font-size:inherit; font:100%; }
+pre, code, kbd, samp, tt { font-family:monospace; *font-size:108%; line-height:100%; }
+p{font-family:"宋体",Arial, Helvetica, sans-serif;line-height:22px;}
+strong{font-weight:bold;}
+/*== reset font ==*/
+/*== 清除浮动 ==*/
+/*=1=*/
+.clearfix:after { content:"."; display:block; height:0; font-size:0; clear:both; visibility:hidden;}
+.clearfix {/* overflow:auto;*/ zoom:1;}
+/*=2=*/
+div.divclear { clear:both; font-size:0; line-height:0;}
+/*== 清除浮动 ==*/
+
+a { outline:none; color:#585858; text-decoration:none;}
+a:hover { text-decoration:none;}
+a img { border:0;}
+ 
+/*== 框架 ==*/
+html,body { width:100%; height:100%;}
+#pageAll,#pageAll td { width:100%; height:100%;}
+#pageBody { width:950px;text-align:left;overflow:hidden;}
+#pageBody2 { width:950px;margin:0 auto;overflow:hidden;text-align:left;}
+.pagecenter { margin:-298px 0 0 -475px; left:50%; top:50%; position:fixed;}
+* html .pagecenter { position:relative;}
+.leftcenter { margin:0 auto;}
+.pagewrap{position:relative;}
+
+#headerBox { width:100%; height:65px; position:relative; z-index:700;margin-top:5px;}
+#headerBox h2 { width:152px; height:49px; margin:5px 0 0; background:url(../images/avenecn-logo.gif) no-repeat; position:absolute; left:38px; top:0;}
+#headerBox h2 a { width:152px; height:49px; float:left; text-indent:-1000em;}
+
+#navBox { width:702px; height:45px; position:absolute; left:195px; top:0px;background:url(../images/avenecn-headbg.gif) center bottom no-repeat;}
+	#contentBox { width:100%;position:relative; z-index:9;overflow:hidden}
+#mainBox { width:100%;}
+#footerBox { width:100%;z-index:999;}
+	.footlink,.footlogo{float:left;}
+	.footlink{font-family:"宋体",Arial, Helvetica, sans-serif;width:225px;float:left;color:#959595;line-height:18px;}
+	.footlink a{color:#959595;}
+	.shopicon{float:left;padding-top:18px;}
+	.footlogo{padding-left:110px;padding-top:10px;}
+	.footfun,.footlang,.footsearch,.footclub{float:right;}
+	.footlang{width:85px;height:16px;background:url(../images/avenecn-lang.gif) no-repeat;position:relative;cursor:pointer;margin-left:10px;}
+		.footlang li,.footlang span{width:64px;height:16px;background:#f2f2f2;text-align:center;}
+		.footlang span{display:block;}
+		.footlang div,.footlang ul,.footlang li{float:left;width:64px;}
+		.footlang div{position:absolute;left:0;top:-1px;height:0px;}
+		.footlang a{color:#585858;}
+	.footfun{margin:15px 0 0 0;font-family:"宋体",Arial, Helvetica, sans-serif;}
+		.footfun li{font-size:9px;float:left;padding-left:6px;width:9px;height:9px;overflow:hidden;cursor:pointer;}
+		.footfun img,.footfun a{float:left;}
+		.footfun a{display:block;margin:0px 0 0 3px;color:#585858;}
+	.footsearch{margin:10px 0 0 10px;}
+		.footsearch input{width:96px;height:14px;border:1px solid #dfdfdf;background:#fbfbfb;}
+		.footsearch .searchbtn{width:16px;height:16px;background:url(../images/aveneen-footbtn.gif) 0 2px no-repeat;border:0px;cursor:pointer;}
+	.footclub{margin:8px 0 0 5px;}
+
+#nav {width:750px; height:45px; padding:0 0 0 0px; position:relative;}
+#nav li{width:86px;float:left;text-align:center;position:relative;background:url(../images/avenecn-menujg.gif) right 10px no-repeat;}
+#nav .wider{width:126px;float:left;margin-left:5px;text-align:center;position:relative;}
+#nav .last{background:none;}
+#nav li a{width:70px;display:block;margin-left:5px;_display:inline;float:left; font-size:14px; color:#585858; height:35px; line-height:35px; text-decoration:none;  font-weight:bold;overflow:hidden;background-image:url(../images/nav.gif);background-repeat:no-repeat;}
+#nav li li a { width:194px; height:20px; line-height:20px; display:block; float:left; padding:0; text-align:left; font-weight:normal; font-size:12px; color:#909090; background:url(../images/nav-sub-bg.gif) 0 0 no-repeat;text-align:center;margin-left:0px;}
+#nav li li a:hover{color:#fff; background:url(../images/nav-sub-bg-hover.gif) 0 0 no-repeat;}
+#nav ul{width:194px;position:absolute;left:-43px;top:32px;display:none;background:#fff;margin-left:0px;}
+#nav ul li{width:194px;}
+#nav .nav0{background-position:0 -210px;text-indent:-1000em;} 
+#nav .nav1{background-position:0 0;text-indent:-1000em;}
+#nav .nav2{background-position:0 -35px;text-indent:-1000em;}
+#nav .nav3{background-position:0 -70px;text-indent:-1000em;}
+#nav .nav4{background-position:0 -105px;text-indent:-1000em;}
+#nav .nav5{background-position:0 -140px;text-indent:-1000em;}
+#nav .nav6{background-position:0 -175px;text-indent:-1000em;}
+#nav .nav7{background-image:url(../images/nav2.gif);width:115px;background-position:0 -258px;text-indent:-1000em;}
+#nav .selected .nav0,#nav .nav0:hover{background-position:-80px -210px;text-indent:-1000em;}
+#nav .selected .nav1,#nav .nav1:hover{background-position:-80px 0;text-indent:-1000em;}
+#nav .selected .nav2,#nav .nav2:hover{background-position:-80px -35px;text-indent:-1000em;}
+#nav .selected .nav3,#nav .nav3:hover{background-position:-80px -70px;text-indent:-1000em;}
+#nav .selected .nav4,#nav .nav4:hover{background-position:-80px -105px;text-indent:-1000em;}
+#nav .selected .nav5,#nav .nav5:hover{background-position:-80px -140px;text-indent:-1000em;}
+#nav .selected .nav6,#nav .nav6:hover{background-position:-80px -175px;text-indent:-1000em;}
+#nav .selected .nav7,#nav .nav7:hover{background-image:url(../images/nav2.gif);width:115px;background-position:-137px -258px;text-indent:-1000em;}
+
+/*== 首页 ==*/
+#indexBox { width:950px; height:576px; margin:0 auto; background:url(../img/index.jpg) no-repeat;}
+
+#cautionBox_blog { width:580px;padding:5px 0 0 0 }
+	#cautionBox_blog .left { float:left; width:35px }
+  #cautionBox_blog .right { float:left; width:545px; background-color:#df010d }
+	#cautionBox_blog marquee { color:white; font-weight:bold; font-size:12px; line-height:20px }
+#cautionBox_product { width:730px; float:right }
+	#cautionBox_product .left { width:40px; float:left; padding:5px 0 0 0 }
+	#cautionBox_product .right { width:690px; float:left; background-color:#df010d; color:white; font-weight:bold; font-size:12px; line-height:18px }
+#attention_bbs { width:720px;padding:0 0 3px 0;padding:0\9;overflow:hidden }
+	#attention_bbs .left { float:left; width:35px }
+  #attention_bbs .right { float:left; width:685px; background-color:#df010d }
+	#attention_bbs marquee { color:white; font-weight:bold; font-size:12px; line-height:20px }
+	
+.idxswf{height:465px;}
+.tourswf{height:485px;}
+/*== Expertise ==*/
+#sidebarBox { width:220px; min-height:490px;_height:490px; float:left;background:url(../images/avenecn-bg.gif) 0 0 repeat-y;}
+#sidebarBox2 { width:220px;float:left;background:url(../images/avenecn-bg.gif) 0 0 repeat-y;}
+	#menuBox,#menuBox dl,#menuBox dt,#menuBox dd{width:200px;float:left;}
+	#menuBox dt{width:190px;font-size:12px;font-weight:bold;text-align:left;padding:25px 0 4px 8px;}
+	#sidebarBox img,#sidebarBox2 img{margin:5px 0 25px 50px;}
+	#sidebarBox dd{text-align:center;}
+	#sidebarBox dd img,#sidebarBox2 dd img{margin:0; }
+	.sidebar-product{width:200px;float:left;position:relative;padding-bottom:8px;}
+		.sidebar-product h3{width:100%;height:25px;background:url(../images/avenecn-leftmenu.gif) 0 0 no-repeat;text-indent:-1000em;cursor:pointer;}
+		.sidebar-product ul{position:absolute;left:0;top:25px;width:200px;background:#fff;display:none;}
+		.sidebar-product li{width:190px;float:left;background:#e6f6f6;margin:4px 0 0 5px;text-align:center;}
+		.sidebar-product a:hover{text-decoration:none;}
+	.sidebar-redness{width:200px;height:130px;float:left;position:relative;padding-bottom:8px;font-weight:bold;}
+		.sidebar-redness h3{width:190px;height:21px;background:#f5f5f5;font-weight:bold;display:block;padding:4px 0 0 10px;}
+		.sidebar-redness ul{width:200px;padding-top:6px;}
+		.sidebar-redness li{width:176px;margin:0 auto;float:left;background:url(../images/avene-leftmenubg.gif) no-repeat;margin:4px 0 0 9px;display:inline;text-align:left;padding-left:8px;height:20px;}
+		.sidebar-redness li a{width:178px;display:block;line-height:20px;}
+		.sidebar-redness li a:hover,.sidebar-redness li .selected{color:#f09e86;text-decoration:none;}
+#textBox { width:730px; min-height:490px;_height:490px;float:left;position:relative;}
+#textBox3{width:730px;float:left;position:relative;}
+	.shadowbg{width:482px;margin-left:2px;font-family:"宋体",Microsoft YaHei,Arial, Helvetica, sans-serif;height:390px;overflow:hidden;float:left;}
+	#textBox h1,#textBox h2,#textBox2 h2{width:482px;height:22px;float:left;margin-left:0px;text-indent:-1000em;}
+	#textBox h2,#textBox2 h2{width:700px;margin:6px 0 10px 0px;color:#f09e86;}
+	.shadowbg dl,.shadowbg dd,.shadowbg dt{width:95%;float:left;line-height:22px;}
+	.shadowbg dt{margin-top:10px;}
+	.shadowbg span{width:95%;float:left;margin-top:10px;line-height:20px;}
+	.shadowbg p{width:95%;float:left;line-height:20px;}
+	.shadowbg div{width:95%;float:left;}
+	.shadowbg ul,.shadowbg li{float:left;width:95%;line-height:22px;}
+	.shadowbg strong{width:100%;float:left;font-weight:bold;}
+	.picbg{position:absolute;right:0px;bottom:0px;text-align:center;}
+	.picbg img{vertical-align:middle;}
+	.picbg a{color:#585858;}
+	.printdiv{position:absolute;left:230px;bottom:0px;}
+	.
+/*==history==*/
+	.history h1,.history h2{float:left;width:80%;}
+	.history p{width:80%;float:left;margin:20px 0 5px 5px;}
+	.his-cont{width:680px;height:334px;background:url(../images/avenecn-history-bg.jpg) no-repeat;float:left;position:relative;}
+	#yeardisc,.yearlist{position:absolute;}
+	#yeardisc{left:6px;top:14px;}
+	.yearlist{left:20px;top:278px;}
+	.yearlist a{width:45px;height:30px;display:block;float:left;text-indent:-1000em;margin-left:20px;}
+		.year-avene{background:url(../images/avenecn-his-year.gif) -45px 0 no-repeat;}
+		.year-1736{background:url(../images/avenecn-his-year.gif)  -45px -30px no-repeat;}
+		.year-1743{background:url(../images/avenecn-his-year.gif)  -45px -60px no-repeat;}
+		.year-1826{background:url(../images/avenecn-his-year.gif)  -45px -90px no-repeat;}
+		.year-1871{background:url(../images/avenecn-his-year.gif)  -45px -120px no-repeat;}
+		.year-1874{background:url(../images/avenecn-his-year.gif)  -45px -150px no-repeat;}
+		.year-1975{background:url(../images/avenecn-his-year.gif)  -45px -180px no-repeat;}
+		.year-1990{background:url(../images/avenecn-his-year.gif)  -45px -210px no-repeat;}
+		.year-2005{background:url(../images/avenecn-his-year.gif)  -45px -240px no-repeat;}
+		.year-avene-sel{background:url(../images/avenecn-his-year.gif) 0 0 no-repeat;}
+		.year-1736-sel{background:url(../images/avenecn-his-year.gif)  0 -30px no-repeat;}
+		.year-1743-sel{background:url(../images/avenecn-his-year.gif)  0 -60px no-repeat;}
+		.year-1826-sel{background:url(../images/avenecn-his-year.gif)  0 -90px no-repeat;}
+		.year-1871-sel{background:url(../images/avenecn-his-year.gif)  0 -120px no-repeat;}
+		.year-1874-sel{background:url(../images/avenecn-his-year.gif)  0 -150px no-repeat;}
+		.year-1975-sel{background:url(../images/avenecn-his-year.gif)  0 -180px no-repeat;}
+		.year-1990-sel{background:url(../images/avenecn-his-year.gif)  0 -210px no-repeat;}
+		.year-2005-sel{background:url(../images/avenecn-his-year.gif)  0 -240px no-repeat;}
+	
+	#articleBox { width:750px; height:490px; background:url(../img/textbox-right-bg.jpg) right bottom no-repeat;}
+		#articleBox div.content { text-align:left; padding:0 0 0 20px;}
+	#printBox { width:64px; height:29px; position:absolute; left:20px; bottom:5px;}
+		#printBox button { width:64px; height:29px; float:left; text-indent:-1000em; border:0; background:url(../img/btn-print.gif); cursor:pointer;}
+/*==experts==*/
+.experts dt{font-weight:bold;}
+
+/*==foundation==*/
+.fundation li{background:url(../images/avene-cn-li.gif) 0 6px no-repeat;padding-left:10px;}
+
+/*==quality==*/
+.quality li{margin-left:20px;}
+.quality span{background:url(../images/avene-cn-li.gif) 0 6px no-repeat;padding-left:10px;}
+.quality .advantage span{background:none;}
+.quality .advantage li{margin-left:10px;background:url(../images/avene-cn-li.gif) 0 4px no-repeat;padding-left:10px;}
+.quality image{padding:20px 0 0 90px;}
+.quality .shadowbg{position:absolute;left:-9999px;top:-9999px;}
+/*==ingredient==*/
+.ingredient ul{margin:0px 0 60px 0;}
+.ingredient li{background:url(../images/avene-cn-li.gif) 0 6px no-repeat;padding-left:10px;}
+.ingredient span{margin-top:60px;}
+
+.ingred_mask{width:646px;height:423px;background:url(../images/avenecn-ingred-bg.png) no-repeat;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod=crop,src='images/avenecn-ingred-bg.png');_background:none;position:absolute;z-index:10;left:0px;top:0px;}
+.ingred_mask_con{width:576px;height:363px;position:absolute;z-index:11;left:0;top:0;padding:30px 35px;font-family:"宋体",Arial, Helvetica, sans-serif;}
+.ingred_mask_con span{width:100%;display:block;line-height:20px;}
+.ingred_mask_con ul,.ingred_mask_con p{line-height:20px;float:left;width:100%;margin-bottom:6px;}
+.ingred_mask_con p{display:block;}
+.ingred_mask_con li{background:url(../images/avene-cn-li.gif) 0 4px no-repeat;padding-left:10px;width:95%;float:left;}
+.ingred_close{position:absolute;right:40px;top:32px;cursor:pointer;z-index:15;}
+#maskbox{display:none;width:646px;height:423px; position:absolute;left:240px;top:10px;}
+#maskboxContent{width:646px;height:423px;position:relative;}
+.ingred-box-img{position:absolute;right:50px;top:85px;z-index:1000;}
+.ingre-img{position:absolute;left:300px;top:110px;}
+
+/*==center==*/
+.center{background:url(../images/avenecn-centerbg.jpg) right bottom no-repeat;}
+.center ul{margin:15px 0 0 0; }
+.center li{background:url(../images/avene-cn-li.gif) 0 6px no-repeat;padding-left:10px;}
+
+/*==factory==*/
+.factory{background:url(../images/avenecn-factorybg.jpg) right bottom no-repeat;}
+.factory ul{margin:15px 0 0 0; }
+.factory li{background:url(../images/avene-cn-li.gif) 0 6px no-repeat;padding-left:10px;}
+/*==redness==*/
+.redness strong{margin-top:15px;}
+.redness ul li,.center ul li,.ingredient .masklink{width:98%;padding-left:4px;background:#efefef;margin-top:5px;float:left;}
+.redness ul li a{width:98%;display:block;}
+.redness ul li a:hover{text-decoration:none;}
+.flv-con{margin:58px auto 0;text-align:center;}
+.redness ul li a label,.center ul li a label,.ingredient .masklink label{color:#f09e86;} 
+.attend{float:left;position:absolute;bottom:20px;left:120px;}
+.attend strong{float:left;}
+
+/*== products ==*/
+#productListMenu { width:750px; height:205px; overflow:hidden; background:url(../images/prodmenu-bg.jpg) 0 90px no-repeat;}
+#scrollable { width:750px; height:205px;position:relative;}
+.__scrollable { left:0;}
+#productListMenu div.items { height:185px; margin:0 0 0 3px; width:720px; position:absolute;left:34px;top:0px; z-index:30;}
+#productListMenu div.items a { width:160px; height:185px; display:block; _display:inline; margin:0 11px 0 0; float:left; text-decoration:none; text-align:center; cursor:pointer;position:relative;}
+#productListMenu div.items a:hover { color:#999; }
+#productListMenu div.items a.active { cursor:default;/* background:url(../img/prod-selected-bg.jpg) 0 0 no-repeat;*/}
+/** html div.items a.active {filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod=crop,src='/img/prod-selected-bg.png') background:none !important;}*/
+#productListMenu div.items a img { }
+#productListMenu div.items a div { line-height:15px; text-align:center; color:#606060;}
+#productListMenu div.items a.active div { color:#c46346;}
+
+#productListMenu a.prev, #productListMenu a.next { display:block; width:32px;float:left; background-repeat:no-repeat; margin:0 0 0 4px; cursor:pointer;height:185px;}
+#productListMenu a.prev { background:#fff url(../images/product-list-menu-prev.gif); }
+#productListMenu a.prev:hover { background:#fff url(../images/product-list-menu-prev.gif); }
+#productListMenu a.next { background:#fff url(../images/product-list-menu-next.gif); }
+#productListMenu a.next:hover { background:#fff url(../images/product-list-menu-next.gif); }
+
+.prevbox{position:absolute;left:0px;top:0px; z-index:29;}
+.nextbox{position:absolute;right:0px;top:0px;}
+
+/*== diagnosis ==*/
+#diagnosisBox { width:750px; height:490px; background:url(../img/diagnosis-bg.jpg) no-repeat; position:relative;}
+	#diagnosisBox div.content { width:445px; position:absolute; left:102px; top:3px;}
+		#diagnosisBox h2 { width:425px; height:70px; text-indent:-1000em; background:url(../img/diagnosis-title.gif) 0 0 no-repeat;}
+		#diagText { }
+		
+/*==qa==*/
+.qa-box-left{float:left;width:236px;margin-left:14px;}
+	.qa-box-left span{width:100%;float:left;text-align:center;margin:10px 0 5px 0;}
+	.qa-box-left dl,.qa-box-left dt,.qa-box-left dd{width:100%;float:left;text-align:center;}
+	.qa-box-left dt{width:226px;line-height:22px;background:#e6e6e6 url(../images/avenecn-qa-icon.gif) 218px 4px no-repeat;padding-left:10px;}
+.qa-box-right{float:left;width:416px;margin:0px 0 0 8px;}
+.qa-box-right h2{width:100%;height:20px;float:left;font-size:18px;}
+.qa-box-right h3{width:100%;height:20px;float:left;margin:5px 0 20px 0;color:#f09e86;font-size:18px;font-family:"微软雅黑",Microsoft YaHei,Arial;}
+.qa-box-right dl,.qa-box-right dt,.qa-box-right dd{width:100%;float:left;}
+.qa-box-right dl{margin-bottom:20px;}
+.qa-box-right dt{width:370px;background:#fee7e1 url(../images/avenecn-qa-icon2.gif) 5px 0 no-repeat;line-hight:22px;padding-left:24px;font-family:"微软雅黑",Microsoft YaHei,Arial;cursor:pointer;}
+.qa-box-right dd{display:none;margin:10px 0 0px 0;line-height:22px;width:90%;}
+
+/*==product==*/
+.production{width:750px;position:absolute;left:200px;top:0px;}
+.prodct-main{width:580px;float:left;background:url(../images/avenecn-productimg1.jpg) 0 20px no-repeat;padding-left:170px;}
+
+.prodct-main-mid{width:337px;height:288px;float:left;margin:10px 0 0 5px;_margin:10px 0 0 2px;display:inline;position:relative;}
+
+.prodct-main-mid h2{letter-spacing:1px;}
+#textBox2 h2,#textBox2 p{width:95%;float:left;}
+.prodct-main-mid p,.mid-con{float:left;width:95%;line-height:22px;padding-left:2px;font-family:"宋体",Arial, Helvetica, sans-serif;}
+.pordct-listdiv,.pordct-infomation,.pordct-link,.pordct-website{float:left;width:100%;}
+.pordct-listdiv{margin:10px 0;position:relative;}
+.pordct-listdiv span{width:330px;height:19px;line-height:19px;float:left;background:url(../images/avenecn-product-listbg.gif) no-repeat;color:#FFF;padding-left:10px;cursor:pointer;}
+.pordct-listdiv ul{display:none;position:absolute;left:0;top:19px;}
+.pordct-listdiv li{width:330px;height:19px;line-height:19px;float:left;background:url(../images/avenecn-product-listbg.gif) 0 -19px no-repeat;color:#FFF;padding-left:10px;margin-top:2px;}
+.pordct-listdiv li a{color:#fff;width:330px;height:19px;display:block;}
+.product-info{width:100%;position:absolute;left:0px;bottom:0px;}
+.pordct-infomation{float:left;}
+.pordct-infomation li,.pordct-link a{line-height:20px;}
+.pordct-link{width:130px;float:right;text-align:left;}
+.pordct-infomation a{width:320px;float:left;line-height:20px;background:url(../images/avenecn-maskbox-icon.gif) 0 0px no-repeat;padding-left:20px;color:#f09e86;}
+.pordct-infomation a:hover,.pordct-listdiv li a,.pordct-link a:hover{text-decoration:none;}
+.pordct-link a{width:130px;float:left;color:#0295c0;padding-left:20px;line-height:20px;}
+.pordct-website a{width:322px;height:40px;float:left;text-indent:-1000em;margin:10px 0 0 10px;background:url(../images/avenecn-product-linkimg.gif) no-repeat;}
+.prodct-main-right{width:225px;float:left;background:url(../images/avenecn-productimgbg.gif) no-repeat;padding-left:13px;text-align:left;}
+
+/*== by ray at 12-31-2009 ==*/
+.babyvideo { width:145px; height:145px; background:url(../images/icon-video.gif) 0 0 no-repeat; position:absolute; right:45px; top:40px; z-index:603;}
+.babyvideoprod { position:absolute; left:250px; top:385px; z-index:603;}	
+	.babyvideo ul { padding:120px 0 0 0 ;}
+		.babyvideo ul li { line-height:21px; padding:2px 0;}
+			.babyvideo ul li a { padding:3px 0 2px 25px; background:url(../images/avenecn-maskbox-icon.gif) no-repeat 0 0;}
+		.babyvideoprod ul li { line-height:12px; padding:2px 0;}	
+			.babyvideoprod ul li a { padding:0 0 0 15px; background:url(../images/icon-video-list.gif) no-repeat 0 0;}
+.babyflvbox{width:580px;height:423px;background:url(../images/avenecn-flvbg.jpg) no-repeat;position:absolute; left:200px; top:115px; z-index:608;display:none;}
+/*== end 12-31-2009 ==*/
+
+/*== by ray at 29-01-2010 ==*/
+.linkreport { width:120px; height:29px; position:absolute; left:530px; top:425px; z-index:603;}
+
+/*== end 29-01-2010 ==*/
+
+/*== 弹出框 ==*/
+#popMask { width:100%; height:900px; display:none; background:#fff; filter:alpha(opacity=80); -moz-opacity: 0.8; opacity: 0.8; position:absolute; left:0; top:0px; z-index:600;}
+#popBox,#popBox2 { width:890px; height:480px; position:absolute; left:-9999em; top:95px; z-index:601;font-family:"宋体",Arial, Helvetica, sans-serif;}
+.pngbackground{width:890px; height:480px;background:url(../images/avenecn-center-bg.png) no-repeat;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod=crop,src='images/avenecn-center-bg.png');_background:none;position:absolute;left:0;top:0;z-index:601;}
+.pngbackground2{width:890px; height:480px;background:url(../images/avenecn-qa-bg.png) no-repeat;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod=crop,src='images/avenecn-qa-bg.png');_background:none;position:absolute;left:0;top:0;z-index:601;}
+.pngbackground3{width:890px; height:480px;background:url(../images/avenecn-prodct-bg.png) no-repeat;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod=crop,src='images/avenecn-prodct-bg.png');_background:none;position:absolute;left:0;top:0;z-index:601;}
+	#popContent { width:890px; height:480px; overflow:hidden; position:relative;}
+		#popContent div.backBox { width:85px; height:15px; }
+			div.backBox a { width:82px; height:14px; float:left; text-indent:-1000em; background:url(../images/btn-box-back.gif) no-repeat;display:block;position:absolute; right:25px; top:2px;z-index:602;}
+			#popBox2 .backBox a{top:0px;}
+		#popContent div.content { width:890px; height:435px; overflow:hidden; position:absolute;left:0;top:0;z-index:602;padding-top:25px;}
+		#popBox2 div.content { width:890px; height:480px; overflow:hidden; position:absolute;left:0;top:0;z-index:602;padding-top:0px;}
+#popTip { width:625px; height:406px; display:none; position:absolute; left:276px; top:177px; z-index:601;} 
+.content h2{width:80%;height:20px;float:left;font-size:18px;padding:0 0 0 32px;}
+.content .prodct-intr h2{padding:0 0 0 0px;}
+.box-menu{width:188px;padding:0px 0 0 32px;float:left;}
+.box-menu ul,.box-menu li{width:100%;float:left;line-height:20px;}
+.box-menu ul{border-top:1px solid #CCC;margin-top:20px;}
+.box-menu li a{height:20px;background:url(../images/avenecn-maskbox-icon.gif) no-repeat;display:block;margin-top:15px;position:relative;padding-left:25px;}
+.box-menu .selectd a{color:#f09e86;}
+.box-menu a:hover{text-decoration:none;}
+
+.box-content{width:640px;float:left;margin:0 0 0 30px;display:inline;font-family:"宋体",Arial, Helvetica, sans-serif;}
+.box-content div{width:430px;float:left;}
+.box-content #center-1box{display:block;}
+.box-content h3,.box-content h4{width:400px;height:20px;float:left;margin-bottom:20px;color:#f09e86;}
+.box-content h4{color:#585858;}
+.box-content .ingre-img{left:220px;}
+.box-content p,.box-content ul{width:400px;float:left;line-height:22px;margin-bottom:15px;}
+.box-scrollcontent{height:290px;overflow:hidden;}
+.box-scrollcontent div{width:93%;float:left;line-height:22px;}
+.box-content strong{font-weight:bold;}
+.box-content span{width:100%;line-height:22px;float:left;}
+.box-content .box-func{width:132px;line-height:22px;float:left;position:absolute;right:60px;top:80px;}
+.box-func img{cursor:pointer;}
+.box-content .box-func-div{width:185px;position:absolute;right:20px;top:50px;background:#fff;border:1px solid #ddd;}
+.box-content li{width:100%;background:url(../images/avene-cn-li.gif) 0 6px no-repeat;padding-left:10px;}
+.center-3img{position:absolute;left:200px;top:100px;}
+
+.box-titlebg{background:url(../images/avenecn-boxtitlebg.gif) 0 2px no-repeat;width:80%;height:19px;font-weight:bold;padding:2px 0 2px 5px}
+.box-simg{width:100%;height:48px;padding-top:7px;background:#f5f5f5;}
+.box-simg img{width:34px;height:34px;background:#e1dcd6;padding:3px;margin-left:5px;}
+.box-bimg {width:100%;text-align:center;padding-top:10px;}
+.box-bimg label{width:100%;display:block;font-weight:bold;padding-top:10px;height:44px;}
+.box-content .box-biggerimg{width:170px;float:left;padding:10px 0 20px 15px;}
+.box-close img{float:right;margin:5px 5px 0px 0;cursor:pointer}
+.box-print{position:absolute;bottom:25px;left:245px;}
+
+.flvbox{width:580px;height:423px;background:url(../images/avenecn-flvbg.jpg) no-repeat;position:absolute; left:200px; top:65px; z-index:608;display:none;}
+.flv-close img{float:right;margin:18px 18px 0px 0;cursor:pointer}
+
+/*==prodctbox==*/
+.prodct-img{width:235px;text-align:center;margin:15px 0 0 14px;_margin:15px 0 0 7px;float:left;color:#585858;}
+.prodct-img div{height:368px;}
+.prodct-img p{text-align:center;width:235px;line-height:15px;}
+.prodct-intr{width:416px;float:left;}
+.prodct-intr h2,.prodct-intr h3,.prodct-intr h4,.prodct-siderprod h5,.prodct-intr p{width:100%;float:left;}
+.prodct-intr h2{font-size:12px;margin-top:10px;}
+.prodct-intr h3{font-size:18px;color:#f09e86;margin:5px 0 10px 0;}
+.prodct-intr h4{width:400px;line-height:22px;font-size:12px;background:url(../images/avenecn-boxtitlebg.gif) no-repeat;padding-left:15px;margin:10px 0 10px 0 ;}
+.prodct-siderprod h5{width:99%;padding:15px 0 2px 0;border-bottom:1px solid #ccc;}
+.prodct-intrnav span{width:68px;height:30px;background:url(../images/avene-product-bannerbg.gif) no-repeat;float:left;text-align:center;padding-top:8px;}
+.prodct-intrnav span a{width:68px;height:30px;display:block;}
+.prodct-intrnav span a:hover,.prodct-intrnav span a.selected{background:url(../images/avene-product-navarrow.gif) center bottom no-repeat;color:#f09e86;text-decoration:none;}
+.prodct-intr p{width:95%;line-height:20px;}
+.prodct-intrcon{display:none;float:left;}
+.prodct-intrcon div{float:left;font-family:"宋体",Arial, Helvetica, sans-serif;line-height:22px;width:95%;}
+.prodct-siderprod{float:left;width:200px;margin-top:40px;}
+.prodct-siderprod img{padding-bottom:0px;}
+.proimg{float:left;}
+.prodct-sider-production{width:100%;float:left;}
+.prodct-sider-production dl{width:200px;height:81px;background:url(../images/avene-product-02.jpg) no-repeat;float:left;}
+.prodct-sider-production dt{width:18px;float:left;color:#f09e86;text-align:center;padding-top:15px;}
+.prodct-sider-production dd{width:182px;height:80px;float:left;text-align:left;overflow:hidden;}
+.prodct-sider-production dd img{vertical-align:middle;margin-right:4px;}
+
+.prodct-sider-hf div.items2 { height:80px; float:left; width:160px;overflow:hidden;}
+.prodct-sider-hf div.items2 a { width:50px; height:80px; float:left; text-decoration:none; text-align:left; cursor:pointer;position:relative;}
+.prodct-sider-hf div.items2 a img{float:left;}
+.prod-name{width:105px;float:left;display:block;padding-top:20px;line-height:19px;}
+
+.prodct-sider-hf a.prev, a.next { display:block; width:10px; height:80px;line-height:80px;float:left; background-repeat:no-repeat; margin:0 0 0 0px; cursor:pointer;}
+.prodct-sider-hf a.prev { background:url(../images/avene-product-left.gif) center 35px no-repeat; }
+.prodct-sider-hf a.prev:hover { background:url(../images/avene-product-left.gif) center 35px  no-repeat; }
+.prodct-sider-hf a.next { background:url(../images/avene-product-right.gif) center 35px  no-repeat; }
+.prodct-sider-hf a.next:hover { background:url(../images/avene-product-right.gif) center 35px  no-repeat; }
+
+/*===protect==*/
+.protect,contact{width:100%;}
+.protect strong,.protect p{width:100%;float:left;line-height:24px;font-family:"宋体",Arial, Helvetica, sans-serif;}
+.protect strong{font-weight:bold;color:#f09e86;margin:10px 0;}
+.orangefont{color:#f09e86;}
+.protect .shadowbg{width:100%;}
+.contact .shadowbg{width:650px;padding:10px 0 10px 40px;background:url(../images/contact_us_210.gif) 400px 45px no-repeat;}
+.contact table{line-height:23px;margin-top:10px;float:left;color:#9d9d9d;}
+.contact input,.contact textarea{width:190px;background:#eee;border:0px;line-height:18px;height:18px;}
+.contact select{width:190px;background:#eee;border:0px;height:18px;padding-bottom:2px;}
+.contact #sex{width:20px;background:#fff;height:12px;}
+.contact textarea{height:60px;margin-top:4px;}
+.contact .confirm{width:56px;height:19px;background:url(../images/btn-confirm.gif) no-repeat;margin-top:10px;}
+.contact label{color:#f09e86}
+
+/*==print==*/
+#pageBody-print{ width:610px;margin:10px auto;font-family:"宋体",Arial, Helvetica, sans-serif;}
+.print{width:100%;margin:0 auto;position:relative;border-bottom:1px solid #eee;padding-bottom:20px;float:left;}
+.print-head{width:100%;float:left;border-bottom:1px solid #eee;padding-bottom:10px;height:55px;}
+.print-head h1 { width:152px; height:49px; margin:5px 0 0; background:url(../images/avenecn-logo.gif) no-repeat; position:absolute; left:38px; top:0;}
+	.print-head h1 a { width:152px; height:49px; float:left; text-indent:-1000em;}
+.print-head h2,.print-head h3{width:370px;float:left;padding-left:230px;font-size:14px;line-height:20px;}
+.print-head h2{color:#585858;margin-top:15px;}
+.print-head h3{color:#f09e86;}
+.print-cont-bimg{width:230px;float:left;text-align:center;color:#f09e86;margin-top:30px;}
+.print-cont{width:380px;line-height:20px;float:left;margin-top:30px;}
+.print-cont h4,.print-cont2 h4{width:100%;float:left;color:#f09e86;font-size:14px;padding:10px 0;font-weight:bold;}
+.print-cont2{width:100%;float:left;line-height:20px;float:left;margin-top:30px;}
+.print-cont2 h5{width:100%;float:left;font-size:14px;padding:10px 0;font-weight:bold;}
+.print-cont2 p img{float:right;margin-left:5px;}
+.print-cont2 p{float:left;width:100%;}
+.print-cont strong,.print-cont2 strong{width:100%;float:left;font-weight:bold;}
+.print-product{width:190px;float:left;}
+.print-product img{float:left;}
+.print-product span{width:117px;float:left;}
+
+/*===diagnosis-test==*/
+.diagnosis-test,.diagnosis-result{width:770px;height:490px;position:absolute;left:-20px;top:-10px;background:url(../images/avene-diag-bg.jpg) no-repeat;padding-top:15px;}
+.diagnosis-test-baby,.diagnosis-result-baby{width:770px;height:490px;position:absolute;left:-20px;top:-10px;background:url(../images/avene-diag-bg-baby.jpg) no-repeat;padding-top:15px;}
+
+
+.text-con{width:436px;margin-left:126px;_margin-left:63px;float:left;}
+#textBox .text-con h2,.text-con p{width:400px;padding-left:20px;}
+.text-con p{margin-bottom:0px;line-height:20px;}
+.text-con p a{float:right;padding-right:10px;}
+.text-con a img{vertical-align:middle;}
+.text-con p span{float:left;}
+
+.diagnosis-test .diagnosis-scroll,.diagnosis-test-baby  .diagnosis-scroll{width:100%;height:360px;float:left;line-height:20px;overflow:hidden;}
+.diagnosis-result .diagnosis-scroll,.diagnosis-result-baby .diagnosis-scroll{width:100%;height:180px;float:left;line-height:20px;overflow:hidden;}
+.diagnosis-scroll h3{width:410px;background:#fee5df;float:left;padding-left:10px;}
+.diagnosis-scroll ul,.diagnosis-scroll li{width:380px;float:left;padding-left:12px;line-height:25px;}
+.diagnosis-scroll select{float:right;}
+.diagnosis-scroll span{float:left;}
+.diagnosis-scroll input{border:0;vertical-align:middle;margin-right:3px;}
+
+
+.diagnosis-test a.jScrollArrowUp { display: block; position: absolute; z-index: 1; top:90px; right: 0px; text-indent: -2000px; overflow: hidden; /*background-color: #666;*/ background:url(../images/avenecn-arrow.gif) 0 0 no-repeat; width:14px;height: 22px; }
+.diagnosis-test a.jScrollArrowDown { display: block; position: absolute; z-index: 1; top:120px; right: 0px; text-indent: -2000px; overflow: hidden; /*background-color: #666;*/ background:url(../images/avenecn-arrow.gif) 0 -22px no-repeat; width:14px;height: 22px; }
+.diagnosis-product{width:420px;float:left;margin-top:10px;}
+.diagnosis-product dl,.diagnosis-product dt,.diagnosis-product dd{width:140px;float:left;}
+.diagnosis-product dt{color:#f09e86;border-bottom:1px solid #ddd;}
+.diagnosis-product dd{width:135px;height:180px;border-right:1px solid #ddd;text-align:center;padding-top:0px;line-height:35px;padding-left:4px;}
+.diagnosis-product .end dd{border-right:1px solid #fff;}
+.retest{text-align:right;float:left;}
+.retest a{height:25px;display:block;padding-right:20px;color:#f09e86;}
+.diagnosis-product div.items3{ height:180px; float:left; width:105px;overflow:hidden;line-height:15px;}
+.diagnosis-product div.items3 a{ width:105px; height:140px; float:left; text-decoration:none; text-align:center; cursor:pointer; }
+.diagnosis-product a.prev1,.diagnosis-product a.next1,.diagnosis-product a.prev2,.diagnosis-product a.next2,.diagnosis-product a.prev3,.diagnosis-product a.next3 { display:block; width:10px; height:140px;line-height:140px;float:left; background-repeat:no-repeat; cursor:pointer;}
+.diagnosis-product a.prev1,.diagnosis-product a.prev2,.diagnosis-product a.prev3 { background:url(../images/avene-product-left.gif) center 35px no-repeat; }
+
+.diagnosis-product a.next1,.diagnosis-product a.next2,.diagnosis-product a.next3 { background:url(../images/avene-product-right.gif) center 35px  no-repeat; }
+
+.diagnosis-result .printimg{position:absolute;right:200px;top:20px;}
+
+/*==salespoint==*/
+.pagecenter-salespoint{margin:0 auto;width:950px;}
+.salespoint, .salespoint2{width:100%;font-family:"宋体",Microsoft YaHei,Arial, Helvetica, sans-serif;/*float:left;*/}
+.salespoint { height:600px;}
+.salespoint h1,.club h1,.boards h1{width:100%;color:#f09e86;font-size:16px;margin-bottom:10px;float:left;}
+.salespoint p{width:100%;float:left;line-height:30px;}
+.cityselect {width:235px; height:250px; background:#fef5f2; border:1px solid #eee; float:right;}
+.cityselect h3 {width:117px; height:17px; background:url(../images/title_shoplist.gif) no-repeat; text-indent:-1000em; margin:30px 0 15px 13px; _display:inline;}
+.cityselect select {width:184px; margin:11px 0 0 25px; _display:inline; color:#585858; border:1px solid #b5aca9; line-height:18px; }
+.cityselect .resetbtn ,.cityselect .submitbutn {width:42px; height:18px; text-indent:-1000em; background:url(../images/btn-shopsite-reset.gif) no-repeat; border:0; cursor:pointer}
+.cityselect .submitbutn {background:url(../images/btn-shopsite-submit.gif) no-repeat; }
+.cityselect  .btn {padding:30px 0 0 120px;}
+.salespoint #idxswf{float:left;}
+
+.salespoint2 .cityselect{width:100%; height:72px; float:left;}
+.salespoint2 .cityselect h3,.salespoint2 .cityselect select {float:left;}
+.salespoint2 .cityselect select{ margin:28px 0 15px 30px; _display:inline;}
+.salespoint2 .cityselect input {margin:28px 0 15px 30px; _display:inline;}
+.salespoint2 .cityselect .submitbutn {margin:28px 0 15px 5px;}
+
+.salespoint2 .shopbox { width:100%; height:395px; background:#fef5f2; border:1px solid #eee; float:left; margin-top:5px;}
+.salespoint2 .shopbox h3 {background:url(../images/title-shopinfo.gif) no-repeat; text-indent:-1000em; margin-bottom:10px;}
+.salespoint2 #shopinfobox { width:230px; float:left;padding:17px 0 0 12px; line-height:18px;}
+.salespoint2 #shopinfo,.salespoint2 #shopinfo {width:100%; height:335px;overflow:hidden; }
+.salespoint2 #shopinfo div {padding:0 0 20px; float:left; width:100%;}
+.salespoint2 #shopinfobox a {color:#f49e87; font-weight:bold;}
+.salespoint2 #shopinfobox img {padding-top:5px;}
+.salespoint2 #mapbox { width:695px; height:395px; border-left:1px solid #eee; float:right; }
+.salespoint2 #map_canvas {margin:16px 0 0 22px; _display:inline;}
+/*==club==*/
+#menuBox-club{float:left;width:100%}
+#menuBox-club dt{width:135px;height:20px;background:url(../images/club-sidebg.gif) no-repeat;float:left;color:#3badcd;padding:6px 0 0 65px;}
+#menuBox-club dd a{width:198px;height:30px;display:block;background:url(../images/club-sideconbg1.gif) no-repeat;float:left;text-align:center;padding-top:27px;}
+#menuBox-club dd a:hover,#menuBox-club dd .selected{background:url(../images/club-sideconbg2.gif) no-repeat;color:#f09e86;text-decoration:none;}
+.club p{float:left;width:100%;line-height:36px;}
+.club #textBox div{width:100%;text-align:center;padding:20px 0 0 0;float:left;}
+
+/*==promot==*/
+.promotion,.newproduct{width:740px;position:absolute;left:200px;top:0px;font-family:"宋体",Microsoft YaHei,Arial, Helvetica, sans-serif;}
+.hot-news{margin-top:10px;float:left;}
+.hot-news dt,.hot-news dd{width:198px;float:left;text-align:center;line-height:20px;}
+#sidebarBox .hot-news dd{text-align:left;padding-left:10px;width:188px;}
+.hot-news dt{font-weight:bold;}
+.promotion select{background:#f1755d;color:#fff;border:0px;}
+.promotion p{padding-left:15px;}
+.promotion div{float:left;}
+.promotion-img{width:740px;text-align:center;}
+.promotion-img div{float:right;_margin-bottom:-1px;}
+.promotion-img .promotion-bigimg{width:100%;text-align:center;}
+.promotion-img div a{width:22px;height:16px;background:url(../images/promot-bar.gif);display:block;float:left;color:#fff;padding-top:4px;}
+.promotion-img div a.selected{background:url(../images/avene-promot-bar-s.gif);color:#f09e86;}
+.hot-discuss{padding:10px 0 20px 0;}
+.hot-discuss a{display:none;}
+/*==news==*/ 
+.news h1{color:#f09e86;float:left;width:100%;}
+.news div,.news-detail div{float:left;}
+.news-list div{width:330px;float:left;border-bottom:1px dotted #ccc;padding:18px 0px;}
+.news-list div img{float:left;}
+.news-list div span{float:right;width:200px;margin-left:5px;}
+.pagenum{width:100%;text-align:right;padding-top:10px;}
+.pagenum a{color:#f09e86;margin-right:15px;}
+.news-detail{width:646px;margin:0 auto;font-family:"宋体",Microsoft YaHei,Arial, Helvetica, sans-serif;}
+#textBox .news-detail h2{text-align:center;color:#f09e86;text-indent:0px;font-size:16px;}
+.news-detail p{line-height:20px;float:left;}
+.news-detail img{margin:3px 10px;float:left;}
+.news-content{width:100%;height:400px;overflow:hidden;}
+.news-list .news-img{float:left;width:120px;height:90px;}
+.news-list .news-img img{display:none;}
+
+/*==newproduct==*/
+.newproduct-img div{float:right;_margin-bottom:-1px;}
+.newproduct-img a{width:140px;height:18px;overflow:hidden;background:url(../images/newprod-bar.gif) no-repeat;display:block;color:#fff;float:left;text-align:center;padding-top:4px;line-height:18px;}
+.newproduct-img img{display:none;}
+.newproduct-img div a.selected{background:url(../images/newprod-bar-sel.gif) no-repeat;color:#f09e86;height:18px;overflow:hidden;line-height:18px;}
+
+#popBox a.jScrollArrowUp { display: block; position: absolute; z-index: 1; bottom:60px; right: 0px; text-indent: -2000px; overflow: hidden; /*background-color: #666;*/ background:url(../images/avenecn-arrow.gif) 0 0 no-repeat; width:14px;height: 22px; }
+#popBox a.jScrollArrowDown { display: block; position: absolute; z-index: 1; bottom:35px; right: 0px; text-indent: -2000px; overflow: hidden; /*background-color: #666;*/ background:url(../images/avenecn-arrow.gif) 0 -22px no-repeat; width:14px;height: 22px; }
+
+
+.prodctlabel{width:90px;background:#fff url(../images/product-icon.gif) 5px center no-repeat;position:absolute;left:80px;top:55px;padding:0 2px 0 16px;display:none;z-index:9;}
+.prodctlabel span{border-left:1px solid #999;padding:10px 0 10px 5px;display:block;text-align:left;font-family:"宋体",Microsoft YaHei,Arial, Helvetica, sans-serif;}
+.items2 .prodctlabel{left:20px;top:10px;}
+.prodctlabelin{display:none;}
+
+.dermato{background:url(../images/avene-dermat-bg.gif) 0 0 repeat-x;float:left;font-family:"宋体",Microsoft YaHei,Arial, Helvetica, sans-serif;}
+.dermato-top{width:100%;height:500px;float:left;padding-bottom:10px;border-bottom:1px dotted #ccc;}
+.dermato .swfbox{width:650px;height:488px;float:left;}
+.dermato .doctor-info{margin-left:14px;width:270px;float:left;}
+.dermato .doctor-info div{width:100%;float:left;}
+.dermato .doctor-photo img{height:250px;}
+.doctor-photo{text-align:center;}
+.docotr-infomation{line-height:22px;margin:0px 0 25px 0;height:120px;}
+.flv-name li{background:url(../images/avene-dermat-icon.gif) 0 center no-repeat;padding-left:20px;line-height:25px;}
+.flv-name a{font-size:14px;}
+.flv-name a:hover{color:#f09e86;}
+
+.doctor-words{width:940px;float:left;margin-top:5px;padding-left:10px;}
+.doctor-words h2{width:100%;float:left;height:30px;background:url(../images/avene-dermat-yl.gif) no-repeat;text-indent:-1000em;}
+.doctor-words div{height:160px;}
+.doctorall{width:100%;float:left;position:relative;height:140px;background:url(../images/avene-dermat-bg2.gif) 0 0 repeat-x;}
+.doctorall h3{width:205px;height:29px;float:left;display:block;background:url(../images/avene-dermat-hz.gif) no-repeat;margin:40px 0 0 10px;_margin:40px 0 0 5px;text-indent:-1000em;}
+.doctorall div{position:relative;float:left;height:124px;}
+.doctorall div span{cursor:pointer;position:absolute;bottom:0px;}
+.doctor-2{left:0px;}
+.doctor-9{left:80px;}
+.doctor-5{left:160px;}
+.doctor-7{left:240px;}
+.doctor-6{left:320px;}
+.doctor-8{left:400px;}
+.doctor-1{left:480px;}
+.doctor-3{left:560px;}
+.doctor-4{left:640px;}
+
+
+.doctorall .doctor-tips{position:absolute;left:170px;bottom:20px;}
+.doctorall .doctor-tips span{display:none;}
+.doctor-2-tip{left:0px;}
+.doctor-9-tip{left:80px;}
+.doctor-5-tip{left:160px;}
+.doctor-7-tip{left:240px;}
+.doctor-6-tip{left:320px;}
+.doctor-8-tip{left:400px;}
+.doctor-1-tip{left:480px;}
+.doctor-3-tip{left:560px;}
+.doctor-4-tip{left:640px;}
+
+
+
+
+
+
+
+
+
+/*==search==*/
+.searchbox{position:absolute;right:-9999em;top:65px;z-index:602;width:730px;height:520px;font-family:"宋体",Microsoft YaHei,Arial, Helvetica, sans-serif;line-height:30px;display:none; }
+.searchbg{width:730px;height:520px;background:url(../images/searchbg.png) no-repeat;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod=crop,src='images/searchbg.png');_background:none;position:absolute;left:0;top:0;}
+.searchcontent h5{width:90px;height:22px;background:url(../images/title-search.gif) no-repeat;float:left;text-indent:-1000em;}
+.search-content{width:672px;height:410px;position:absolute;left:35px;top:65px;line-height:30px;}
+.searchcontent{width:672px;height:410px;line-height:30px;}
+.searchcontent input{width:104px;height:18px;background:#fbfbfb;border:1px solid #ddd;float:left;line-height:18px;}
+.searchcontent button{width:21px;height:18px;background:url(../images/aveneen-footbtn.gif) 5px 2px no-repeat;border:0px;float:left;}
+.searchcontent p{float:left;width:100%;padding-top:10px;}
+.searchcontent strong{font-weight:bold;}
+.searchcontent span{float:left;}
+.searchcontent .line{border-top:1px solid #ddd;width:90%;margin-top:10px;float:right;}
+.searchcontent ul li{float:left;width:100%;}
+.searchcontent ul li a{background:url(../images/avenecn-maskbox-icon.gif) 0 5px no-repeat;display:block;position:relative;padding-left:25px;}
+.searchcontent .nextpage{position:absolute;right:20px;bottom:10px;z-index:700;}
+.searchcontent .nextpage a{width:40px;background:url(../images/avenecn-maskbox-icon.gif) 0 5px no-repeat;display:block;position:relative;padding-left:25px;float:left;}
+.searchclose{position:absolute;top:-25px;height:15px;left:0px;width:100%;display:block;text-indent:-1000em;}
+
+.Pager_Seleted{font-weight:bold;}
+/*试用报告*/
+.report,.reportdetail{font-family:"宋体",Arial, Helvetica, sans-serif;}
+.report h1,.reportdetail h1{width:100%;background:url(../images/title-report.gif) 20px 0 no-repeat;float:left;display:block;}
+.report-xl{width:695px;height:190px;float:left;position:relative;margin-bottom:5px;}
+.report-xl .items{width:670px;height:190px;float:left;position:absolute;left:12px;top:0px;z-index:999;overflow:hidden;}
+.report-xl .items div{width:135px;float:left;text-align:center;background:url(../images/report-imgbg.gif) center 0 no-repeat;line-height:33px;color:#585858;}
+.report-xl .items div img{padding:8px 0 0 0px;width:112px;height:153px;}
+.report-xl a.prev, .report-xl a.next { display:block; width:7px;height:10px;font-size:0px;float:left; background-repeat:no-repeat; cursor:pointer;}
+.report-xl a.prev { background:#fff url(../images/report-arrleft.gif) no-repeat; }
+.report-xl a.next { background:#fff url(../images/report-arrright.gif) no-repeat; }
+.report-xl .prevbox{position:absolute;left:0px;top:80px; z-index:29;}
+.report-xl .nextbox{position:absolute;right:0px;top:80px;}
+.report-xl .items .selected{background:url(../images/report-imgselect.gif) center 0 no-repeat;color:#fa8069;}
+.report-xl .items .selected a{color:#fa8069;}
+.report .jg{width:668px;float:left;margin:0 0 6px 21px;_display:inline;background:#ebebeb;height:7px;font-size:0px;}
+.report-content{width:680px;height:145px;background:url(../images/report-bg.gif) no-repeat;float:left;overflow:hidden;margin-left:15px;_display:inline;padding-left:30px;}
+.report-content h3{font-weight:bold;margin:15px 0 10px 0;}
+.report-content span{width:604px;height:22px;margin:5px 0;display:block;line-height:22px;background:#efefef;/*background:#efefef url(../images/report-dot.gif) 10px center no-repeat;padding-left:20px;*/}
+.report-content label{color:#f09e86;padding:0 5px;}
+.report a.jScrollArrowUp {bottom: 30px; right: 9px;}
+.report a.jScrollArrowDown {bottom: 5px; right: 9px;}
+
+.reportdetail h1{background:url(../images/title-report-det.gif) 10px 0 no-repeat;padding-bottom:8px;}
+.reportdetail h4{width:147px;display:block;float:left;color:#fa8069;text-indent:inherit;font-size:16px;font-family:"微软雅黑","宋体",Arial, Helvetica, sans-serif;}
+.backlink{width:109px;height:21px;background:url(../images/report-back.gif) 0 5px no-repeat;display:block;float:left;text-indent:-1000em;}
+.report-head{width:700px;float:left;padding-left:10px;}
+.report-pro-img{float:left;width:140px;background:url(../images/report-imgbg.gif) center 0 no-repeat;text-align:center;line-height:33px;margin:10px 0 0 0;}
+.usestep{margin: 12px auto 0px; width: 110px; line-height: 18px; display: block;}
+.report-pro-img img{padding-top:8px;}
+.report-pro-content{float:left;width:584px;background:url(../images/report-dbg.gif) no-repeat;margin:10px 0 0 0;}
+.report-pro-content .jg{width:565px;float:left;margin-left:7px;_display:inline;background:#ebebeb;height:7px;font-size:0px;}
+.report-procontent{width:564px;float:left;padding-left:25px;height:470px;overflow:hidden;}
+.report-procontent div,.report-procontent p{float:left;width:530px;line-height:22px;}
+.report-procontent strong{margin:8px 0;float:left;}
+.content-pg{width:100%;text-align:right;padding:15px 0 25px 0;position:relative;}
+.content-pg a{padding:10px 10px 10px 0;}
+.pg-pre,.pg-next{position:absolute;top:0;right:0px;}
+.pg-pre{right:70px;}
+
+.report-pro-content a.jScrollArrowUp {bottom: 45px; right: 0px;}
+.report-pro-content a.jScrollArrowDown {bottom: 20px; right: 0px;}
+
+.emagazine{}
+.emagazine h1{background:url(../images/title-magaz.gif) 10px 0 no-repeat;padding-bottom:8px;}
+.new-mag{width:100%;border-bottom:1px solid #ffbcb1;float:left;padding-bottom:10px;}
+.new-mag img,.new-mag div,.new-mag div p,.new-mag div span,.new-mag div span a{float:left;}
+.new-mag div{width:500px;padding-left:15px;font-weight:bold;font-size:14px;margin-top:11px;}
+.new-mag div p{width:100%;line-height:18px;font-family:Arial,"宋体",Helvetica,sans-serif;}
+.new-mag div span{margin-top:25px;}
+.new-mag div span a{margin-right:10px;}
+.old-mag{width:100%;float:left;position:relative;height:410px;}
+.old-mag-box{width:365px;float:left;padding-top:25px;}
+.old-mag-box img{float:left;padding-left:15px;}
+.old-mag-box div{float:left;width:220px;padding-left:10px;font-weight:bold;font-size:12px;}
+.old-mag-box div p{float:left;width:100%;height:74px;line-height:18px;font-family:Arial,"宋体",Helvetica,sans-serif;}
+.old-mag-box div span{float:left;}
+.old-mag-box div span a{float:left;margin-right:10px;}
+.old-mag-box div span img{padding-left:0px;}
+
+.old-mag .items{width:730px;height:340px;float:left;position:absolute;left:0px;top:20px;z-index:999;overflow:hidden;}
+.old-mag a.prev, .old-mag a.next { display:block; width:24px;height:15px;font-size:0px;float:left; background-repeat:no-repeat; cursor:pointer;}
+.old-mag a.prev { background:#fff url(../images/btn-mag-up.gif) no-repeat; }
+.old-mag a.next { background:#fff url(../images/btn-mag-down.gif) no-repeat; }
+.old-mag .prevbox{position:absolute;left:50%;top:5px; z-index:29;width:24px;height:15px;}
+.old-mag .nextbox{position:absolute;left:50%;top:375px;width:24px;height:15px;}

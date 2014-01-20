@@ -1,0 +1,2410 @@
+
+(function (a) {
+    a.extend(a.fn, {
+        validate: function (b) {
+            if (!this.length) {
+                b && b.debug && window.console && console.warn("nothing selected, can't validate, returning nothing");
+                return
+            }
+            var c = a.data(this[0], "validator");
+            if (c) {
+                return c
+            }
+            c = new a.validator(b, this[0]);
+            a.data(this[0], "validator", c);
+            if (c.settings.onsubmit) {
+                this.find("input, button").filter(".cancel").click(function () {
+                    c.cancelSubmit = true
+                });
+                if (c.settings.submitHandler) {
+                    this.find("input, button").filter(":submit").click(function () {
+                        c.submitButton = this
+                    })
+                }
+                this.submit(function (d) {
+                    if (c.settings.debug) {
+                        d.preventDefault()
+                    }
+
+                    function e() {
+                        if (c.settings.submitHandler) {
+                            if (c.submitButton) {
+                                var f = a("<input type='hidden'/>").attr("name", c.submitButton.name).val(c.submitButton.value).appendTo(c.currentForm)
+                            }
+                            c.settings.submitHandler.call(c, c.currentForm);
+                            if (c.submitButton) {
+                                f.remove()
+                            }
+                            return false
+                        }
+                        return true
+                    }
+                    if (c.cancelSubmit) {
+                        c.cancelSubmit = false;
+                        return e()
+                    }
+                    if (c.form()) {
+                        if (c.pendingRequest) {
+                            c.formSubmitted = true;
+                            return false
+                        }
+                        return e()
+                    } else {
+                        c.focusInvalid();
+                        return false
+                    }
+                })
+            }
+            return c
+        },
+        valid: function () {
+            if (a(this[0]).is("form")) {
+                return this.validate().form()
+            } else {
+                var c = true;
+                var b = a(this[0].form).validate();
+                this.each(function () {
+                    c &= b.element(this)
+                });
+                return c
+            }
+        },
+        removeAttrs: function (d) {
+            var b = {}, c = this;
+            a.each(d.split(/\s/), function (e, f) {
+                b[f] = c.attr(f);
+                c.removeAttr(f)
+            });
+            return b
+        },
+        rules: function (e, b) {
+            var g = this[0];
+            if (e) {
+                var d = a.data(g.form, "validator").settings;
+                var i = d.rules;
+                var j = a.validator.staticRules(g);
+                switch (e) {
+                    case "add":
+                        a.extend(j, a.validator.normalizeRule(b));
+                        i[g.name] = j;
+                        if (b.messages) {
+                            d.messages[g.name] = a.extend(d.messages[g.name], b.messages)
+                        }
+                        break;
+                    case "remove":
+                        if (!b) {
+                            delete i[g.name];
+                            return j
+                        }
+                        var h = {};
+                        a.each(b.split(/\s/), function (k, l) {
+                            h[l] = j[l];
+                            delete j[l]
+                        });
+                        return h
+                }
+            }
+            var f = a.validator.normalizeRules(a.extend({}, a.validator.metadataRules(g), a.validator.classRules(g), a.validator.attributeRules(g), a.validator.staticRules(g)), g);
+            if (f.required) {
+                var c = f.required;
+                delete f.required;
+                f = a.extend({
+                    required: c
+                }, f)
+            }
+            return f
+        }
+    });
+    a.extend(a.expr[":"], {
+        blank: function (b) {
+            return !a.trim(b.value)
+        },
+        filled: function (b) {
+            return !!a.trim(b.value)
+        },
+        unchecked: function (b) {
+            return !b.checked
+        }
+    });
+    a.validator = function (b, c) {
+        this.settings = a.extend({}, a.validator.defaults, b);
+        this.currentForm = c;
+        this.init()
+    };
+    a.validator.format = function (b, c) {
+        if (arguments.length == 1) {
+            return function () {
+                var d = a.makeArray(arguments);
+                d.unshift(b);
+                return a.validator.format.apply(this, d)
+            }
+        }
+        if (arguments.length > 2 && c.constructor != Array) {
+            c = a.makeArray(arguments).slice(1)
+        }
+        if (c.constructor != Array) {
+            c = [c]
+        }
+        a.each(c, function (d, e) {
+            b = b.replace(new RegExp("\\{" + d + "\\}", "g"), e)
+        });
+        return b
+    };
+    a.extend(a.validator, {
+        defaults: {
+            messages: {},
+            groups: {},
+            rules: {},
+            errorClass: "error",
+            validClass: "valid",
+            errorElement: "label",
+            focusInvalid: true,
+            errorContainer: a([]),
+            errorLabelContainer: a([]),
+            onsubmit: true,
+            ignore: [],
+            ignoreTitle: false,
+            onfocusin: function (b) {
+                this.lastActive = b;
+                if (this.settings.focusCleanup && !this.blockFocusCleanup) {
+                    this.settings.unhighlight && this.settings.unhighlight.call(this, b, this.settings.errorClass, this.settings.validClass);
+                    this.errorsFor(b).hide()
+                }
+            },
+            onfocusout: function (b) {
+                if (!this.checkable(b) && (b.name in this.submitted || !this.optional(b))) {
+                    this.element(b)
+                }
+            },
+            onkeyup: function (b) {
+                if (b.name in this.submitted || b == this.lastElement) {
+                    this.element(b)
+                }
+            },
+            onclick: function (b) {
+                if (b.name in this.submitted) {
+                    this.element(b)
+                }
+            },
+            highlight: function (d, b, c) {
+                a(d).addClass(b).removeClass(c)
+            },
+            unhighlight: function (d, b, c) {
+                a(d).removeClass(b).addClass(c)
+            }
+        },
+        setDefaults: function (b) {
+            a.extend(a.validator.defaults, b)
+        },
+        messages: {
+            required: "This field is required.",
+            remote: "Please fix this field.",
+            email: "Please enter a valid email address.",
+            url: "Please enter a valid URL.",
+            date: "Please enter a valid date.",
+            dateISO: "Please enter a valid date (ISO).",
+            dateDE: "Bitte geben Sie ein gültiges Datum ein.",
+            number: "Please enter a valid number.",
+            numberDE: "Bitte geben Sie eine Nummer ein.",
+            digits: "Please enter only digits",
+            creditcard: "Please enter a valid credit card number.",
+            equalTo: "Please enter the same value again.",
+            accept: "Please enter a value with a valid extension.",
+            maxlength: a.validator.format("Please enter no more than {0} characters."),
+            minlength: a.validator.format("Please enter at least {0} characters."),
+            rangelength: a.validator.format("Please enter a value between {0} and {1} characters long."),
+            range: a.validator.format("Please enter a value between {0} and {1}."),
+            max: a.validator.format("Please enter a value less than or equal to {0}."),
+            min: a.validator.format("Please enter a value greater than or equal to {0}.")
+        },
+        autoCreateRanges: false,
+        prototype: {
+            init: function () {
+                this.labelContainer = a(this.settings.errorLabelContainer);
+                this.errorContext = this.labelContainer.length && this.labelContainer || a(this.currentForm);
+                this.containers = a(this.settings.errorContainer).add(this.settings.errorLabelContainer);
+                this.submitted = {};
+                this.valueCache = {};
+                this.pendingRequest = 0;
+                this.pending = {};
+                this.invalid = {};
+                this.reset();
+                var b = (this.groups = {});
+                a.each(this.settings.groups, function (e, f) {
+                    a.each(f.split(/\s/), function (h, g) {
+                        b[g] = e
+                    })
+                });
+                var d = this.settings.rules;
+                a.each(d, function (e, f) {
+                    d[e] = a.validator.normalizeRule(f)
+                });
+
+                function c(f) {
+                    var e = a.data(this[0].form, "validator");
+                    e.settings["on" + f.type] && e.settings["on" + f.type].call(e, this[0])
+                }
+                a(this.currentForm).delegate("focusin focusout keyup", ":text, :password, :file, select, textarea", c).delegate("click", ":radio, :checkbox", c);
+                if (this.settings.invalidHandler) {
+                    a(this.currentForm).bind("invalid-form.validate", this.settings.invalidHandler)
+                }
+            },
+            form: function () {
+                this.checkForm();
+                a.extend(this.submitted, this.errorMap);
+                this.invalid = a.extend({}, this.errorMap);
+                if (!this.valid()) {
+                    a(this.currentForm).triggerHandler("invalid-form", [this])
+                }
+                this.showErrors();
+                return this.valid()
+            },
+            checkForm: function () {
+                this.prepareForm();
+                for (var b = 0, c = (this.currentElements = this.elements()); c[b]; b++) {
+                    this.check(c[b])
+                }
+                return this.valid()
+            },
+            element: function (c) {
+                c = this.clean(c);
+                this.lastElement = c;
+                this.prepareElement(c);
+                this.currentElements = a(c);
+                var b = this.check(c);
+                if (b) {
+                    delete this.invalid[c.name]
+                } else {
+                    this.invalid[c.name] = true
+                } if (!this.numberOfInvalids()) {
+                    this.toHide = this.toHide.add(this.containers)
+                }
+                this.showErrors();
+                return b
+            },
+            showErrors: function (c) {
+                if (c) {
+                    a.extend(this.errorMap, c);
+                    this.errorList = [];
+                    for (var b in c) {
+                        this.errorList.push({
+                            message: c[b],
+                            element: this.findByName(b)[0]
+                        })
+                    }
+                    this.successList = a.grep(this.successList, function (d) {
+                        return !(d.name in c)
+                    })
+                }
+                this.settings.showErrors ? this.settings.showErrors.call(this, this.errorMap, this.errorList) : this.defaultShowErrors()
+            },
+            resetForm: function () {
+                if (a.fn.resetForm) {
+                    a(this.currentForm).resetForm()
+                }
+                this.submitted = {};
+                this.prepareForm();
+                this.hideErrors();
+                this.elements().removeClass(this.settings.errorClass)
+            },
+            numberOfInvalids: function () {
+                return this.objectLength(this.invalid)
+            },
+            objectLength: function (d) {
+                var c = 0;
+                for (var b in d) {
+                    c++
+                }
+                return c
+            },
+            hideErrors: function () {
+                this.addWrapper(this.toHide).hide()
+            },
+            valid: function () {
+                return this.size() == 0
+            },
+            size: function () {
+                return this.errorList.length
+            },
+            focusInvalid: function () {
+                if (this.settings.focusInvalid) {
+                    try {
+                        a(this.findLastActive() || this.errorList.length && this.errorList[0].element || []).filter(":visible").focus()
+                    } catch (b) {}
+                }
+            },
+            findLastActive: function () {
+                var b = this.lastActive;
+                return b && a.grep(this.errorList, function (c) {
+                    return c.element.name == b.name
+                }).length == 1 && b
+            },
+            elements: function () {
+                var c = this,
+                    b = {};
+                return a([]).add(this.currentForm.elements).filter(":input").not(":submit, :reset, :image, [disabled]").not(this.settings.ignore).filter(function () {
+                    !this.name && c.settings.debug && window.console && console.error("%o has no name assigned", this);
+                    if (this.name in b || !c.objectLength(a(this).rules())) {
+                        return false
+                    }
+                    b[this.name] = true;
+                    return true
+                })
+            },
+            clean: function (b) {
+                return a(b)[0]
+            },
+            errors: function () {
+                return a(this.settings.errorElement + "." + this.settings.errorClass, this.errorContext)
+            },
+            reset: function () {
+                this.successList = [];
+                this.errorList = [];
+                this.errorMap = {};
+                this.toShow = a([]);
+                this.toHide = a([]);
+                this.formSubmitted = false;
+                this.currentElements = a([])
+            },
+            prepareForm: function () {
+                this.reset();
+                this.toHide = this.errors().add(this.containers)
+            },
+            prepareElement: function (b) {
+                this.reset();
+                this.toHide = this.errorsFor(b)
+            },
+            check: function (c) {
+                c = this.clean(c);
+                if (this.checkable(c)) {
+                    c = this.findByName(c.name)[0]
+                }
+                var h = a(c).rules();
+                var d = false;
+                for (method in h) {
+                    var g = {
+                        method: method,
+                        parameters: h[method]
+                    };
+                    try {
+                        var b = a.validator.methods[method].call(this, c.value.replace(/\r/g, ""), c, g.parameters);
+                        if (b == "dependency-mismatch") {
+                            d = true;
+                            continue
+                        }
+                        d = false;
+                        if (b == "pending") {
+                            this.toHide = this.toHide.not(this.errorsFor(c));
+                            return
+                        }
+                        if (!b) {
+                            this.formatAndAdd(c, g);
+                            return false
+                        }
+                    } catch (f) {
+                        this.settings.debug && window.console && console.log("exception occured when checking element " + c.id + ", check the '" + g.method + "' method");
+                        throw f
+                    }
+                }
+                if (d) {
+                    return
+                }
+                if (this.objectLength(h)) {
+                    this.successList.push(c)
+                }
+                return true
+            },
+            customMetaMessage: function (b, d) {
+                if (!a.metadata) {
+                    return
+                }
+                var c = this.settings.meta ? a(b).metadata()[this.settings.meta] : a(b).metadata();
+                return c && c.messages && c.messages[d]
+            },
+            customMessage: function (c, d) {
+                var b = this.settings.messages[c];
+                return b && (b.constructor == String ? b : b[d])
+            },
+            findDefined: function () {
+                for (var b = 0; b < arguments.length; b++) {
+                    if (arguments[b] !== undefined) {
+                        return arguments[b]
+                    }
+                }
+                return undefined
+            },
+            defaultMessage: function (b, c) {
+                return this.findDefined(this.customMessage(b.name, c), this.customMetaMessage(b, c), !this.settings.ignoreTitle && b.title || undefined, a.validator.messages[c], "<strong>Warning: No message defined for " + b.name + "</strong>")
+            },
+            formatAndAdd: function (b, d) {
+                var c = this.defaultMessage(b, d.method);
+                if (typeof c == "function") {
+                    c = c.call(this, d.parameters, b)
+                }
+                this.errorList.push({
+                    message: c,
+                    element: b
+                });
+                this.errorMap[b.name] = c;
+                this.submitted[b.name] = c
+            },
+            addWrapper: function (b) {
+                if (this.settings.wrapper) {
+                    b = b.add(b.parent(this.settings.wrapper))
+                }
+                return b
+            },
+            defaultShowErrors: function () {
+                for (var c = 0; this.errorList[c]; c++) {
+                    var b = this.errorList[c];
+                    this.settings.highlight && this.settings.highlight.call(this, b.element, this.settings.errorClass, this.settings.validClass);
+                    this.showLabel(b.element, b.message)
+                }
+                if (this.errorList.length) {
+                    this.toShow = this.toShow.add(this.containers)
+                }
+                if (this.settings.success) {
+                    for (var c = 0; this.successList[c]; c++) {
+                        this.showLabel(this.successList[c])
+                    }
+                }
+                if (this.settings.unhighlight) {
+                    for (var c = 0, d = this.validElements(); d[c]; c++) {
+                        this.settings.unhighlight.call(this, d[c], this.settings.errorClass, this.settings.validClass)
+                    }
+                }
+                this.toHide = this.toHide.not(this.toShow);
+                this.hideErrors();
+                this.addWrapper(this.toShow).show()
+            },
+            validElements: function () {
+                return this.currentElements.not(this.invalidElements())
+            },
+            invalidElements: function () {
+                return a(this.errorList).map(function () {
+                    return this.element
+                })
+            },
+            showLabel: function (c, d) {
+                var b = this.errorsFor(c);
+                if (b.length) {
+                    b.removeClass().addClass(this.settings.errorClass);
+                    b.attr("generated") && b.html(d)
+                } else {
+                    b = a("<" + this.settings.errorElement + "/>").attr({
+                        "for": this.idOrName(c),
+                        generated: true
+                    }).addClass(this.settings.errorClass).html(d || "");
+                    if (this.settings.wrapper) {
+                        b = b.hide().show().wrap("<" + this.settings.wrapper + "/>").parent()
+                    }
+                    if (!this.labelContainer.append(b).length) {
+                        this.settings.errorPlacement ? this.settings.errorPlacement(b, a(c)) : b.insertAfter(c)
+                    }
+                } if (!d && this.settings.success) {
+                    b.text("");
+                    typeof this.settings.success == "string" ? b.addClass(this.settings.success) : this.settings.success(b)
+                }
+                this.toShow = this.toShow.add(b)
+            },
+            errorsFor: function (b) {
+                return this.errors().filter("[for='" + this.idOrName(b) + "']")
+            },
+            idOrName: function (b) {
+                return this.groups[b.name] || (this.checkable(b) ? b.name : b.id || b.name)
+            },
+            checkable: function (b) {
+                return /radio|checkbox/i.test(b.type)
+            },
+            findByName: function (b) {
+                var c = this.currentForm;
+                return a(document.getElementsByName(b)).map(function (d, e) {
+                    return e.form == c && e.name == b && e || null
+                })
+            },
+            getLength: function (c, b) {
+                switch (b.nodeName.toLowerCase()) {
+                    case "select":
+                        return a("option:selected", b).length;
+                    case "input":
+                        if (this.checkable(b)) {
+                            return this.findByName(b.name).filter(":checked").length
+                        }
+                }
+                return c.length
+            },
+            depend: function (c, b) {
+                return this.dependTypes[typeof c] ? this.dependTypes[typeof c](c, b) : true
+            },
+            dependTypes: {
+                "boolean": function (c, b) {
+                    return c
+                },
+                string: function (c, b) {
+                    return !!a(c, b.form).length
+                },
+                "function": function (c, b) {
+                    return c(b)
+                }
+            },
+            optional: function (b) {
+                return !a.validator.methods.required.call(this, a.trim(b.value), b) && "dependency-mismatch"
+            },
+            startRequest: function (b) {
+                if (!this.pending[b.name]) {
+                    this.pendingRequest++;
+                    this.pending[b.name] = true
+                }
+            },
+            stopRequest: function (b, c) {
+                this.pendingRequest--;
+                if (this.pendingRequest < 0) {
+                    this.pendingRequest = 0
+                }
+                delete this.pending[b.name];
+                if (c && this.pendingRequest == 0 && this.formSubmitted && this.form()) {
+                    a(this.currentForm).submit()
+                } else {
+                    if (!c && this.pendingRequest == 0 && this.formSubmitted) {
+                        a(this.currentForm).triggerHandler("invalid-form", [this])
+                    }
+                }
+            },
+            previousValue: function (b) {
+                return a.data(b, "previousValue") || a.data(b, "previousValue", previous = {
+                    old: null,
+                    valid: true,
+                    message: this.defaultMessage(b, "remote")
+                })
+            }
+        },
+        classRuleSettings: {
+            required: {
+                required: true
+            },
+            email: {
+                email: true
+            },
+            url: {
+                url: true
+            },
+            date: {
+                date: true
+            },
+            dateISO: {
+                dateISO: true
+            },
+            dateDE: {
+                dateDE: true
+            },
+            number: {
+                number: true
+            },
+            numberDE: {
+                numberDE: true
+            },
+            digits: {
+                digits: true
+            },
+            creditcard: {
+                creditcard: true
+            }
+        },
+        addClassRules: function (b, c) {
+            b.constructor == String ? this.classRuleSettings[b] = c : a.extend(this.classRuleSettings, b)
+        },
+        classRules: function (c) {
+            var d = {};
+            var b = a(c).attr("class");
+            b && a.each(b.split(" "), function () {
+                if (this in a.validator.classRuleSettings) {
+                    a.extend(d, a.validator.classRuleSettings[this])
+                }
+            });
+            return d
+        },
+        attributeRules: function (c) {
+            var e = {};
+            var b = a(c);
+            for (method in a.validator.methods) {
+                var d = b.attr(method);
+                if (d) {
+                    e[method] = d
+                }
+            }
+            if (e.maxlength && /-1|2147483647|524288/.test(e.maxlength)) {
+                delete e.maxlength
+            }
+            return e
+        },
+        metadataRules: function (b) {
+            if (!a.metadata) {
+                return {}
+            }
+            var c = a.data(b.form, "validator").settings.meta;
+            return c ? a(b).metadata()[c] : a(b).metadata()
+        },
+        staticRules: function (c) {
+            var d = {};
+            var b = a.data(c.form, "validator");
+            if (b.settings.rules) {
+                d = a.validator.normalizeRule(b.settings.rules[c.name]) || {}
+            }
+            return d
+        },
+        normalizeRules: function (c, b) {
+            a.each(c, function (f, e) {
+                if (e === false) {
+                    delete c[f];
+                    return
+                }
+                if (e.param || e.depends) {
+                    var d = true;
+                    switch (typeof e.depends) {
+                        case "string":
+                            d = !! a(e.depends, b.form).length;
+                            break;
+                        case "function":
+                            d = e.depends.call(b, b);
+                            break
+                    }
+                    if (d) {
+                        c[f] = e.param !== undefined ? e.param : true
+                    } else {
+                        delete c[f]
+                    }
+                }
+            });
+            a.each(c, function (d, e) {
+                c[d] = a.isFunction(e) ? e(b) : e
+            });
+            a.each(["minlength", "maxlength", "min", "max"], function () {
+                if (c[this]) {
+                    c[this] = Number(c[this])
+                }
+            });
+            a.each(["rangelength", "range"], function () {
+                if (c[this]) {
+                    c[this] = [Number(c[this][0]), Number(c[this][1])]
+                }
+            });
+            if (a.validator.autoCreateRanges) {
+                if (c.min && c.max) {
+                    c.range = [c.min, c.max];
+                    delete c.min;
+                    delete c.max
+                }
+                if (c.minlength && c.maxlength) {
+                    c.rangelength = [c.minlength, c.maxlength];
+                    delete c.minlength;
+                    delete c.maxlength
+                }
+            }
+            if (c.messages) {
+                delete c.messages
+            }
+            return c
+        },
+        normalizeRule: function (c) {
+            if (typeof c == "string") {
+                var b = {};
+                a.each(c.split(/\s/), function () {
+                    b[this] = true
+                });
+                c = b
+            }
+            return c
+        },
+        addMethod: function (b, d, c) {
+            a.validator.methods[b] = d;
+            a.validator.messages[b] = c || a.validator.messages[b];
+            if (d.length < 3) {
+                a.validator.addClassRules(b, a.validator.normalizeRule(b))
+            }
+        },
+        methods: {
+            required: function (d, c, e) {
+                if (!this.depend(e, c)) {
+                    return "dependency-mismatch"
+                }
+                switch (c.nodeName.toLowerCase()) {
+                    case "select":
+                        var b = a("option:selected", c);
+                        return b.length > 0 && (c.type == "select-multiple" || (a.browser.msie && !(b[0].attributes.value.specified) ? b[0].text : b[0].value).length > 0);
+                    case "input":
+                        if (this.checkable(c)) {
+                            return this.getLength(d, c) > 0
+                        }
+                    default:
+                        return a.trim(d).length > 0
+                }
+            },
+            remote: function (f, c, g) {
+                if (this.optional(c)) {
+                    return "dependency-mismatch"
+                }
+                var d = this.previousValue(c);
+                if (!this.settings.messages[c.name]) {
+                    this.settings.messages[c.name] = {}
+                }
+                this.settings.messages[c.name].remote = typeof d.message == "function" ? d.message(f) : d.message;
+                g = typeof g == "string" && {
+                    url: g
+                } || g;
+                if (d.old !== f) {
+                    d.old = f;
+                    var b = this;
+                    this.startRequest(c);
+                    var e = {};
+                    e[c.name] = f;
+                    a.ajax(a.extend(true, {
+                        url: g,
+                        mode: "abort",
+                        port: "validate" + c.name,
+                        dataType: "json",
+                        data: e,
+                        success: function (i) {
+                            var j = i === true;
+                            if (j) {
+                                var h = b.formSubmitted;
+                                b.prepareElement(c);
+                                b.formSubmitted = h;
+                                b.successList.push(c);
+                                b.showErrors()
+                            } else {
+                                var k = {};
+                                k[c.name] = d.message = i || b.defaultMessage(c, "remote");
+                                b.showErrors(k)
+                            }
+                            d.valid = j;
+                            b.stopRequest(c, j)
+                        }
+                    }, g));
+                    return "pending"
+                } else {
+                    if (this.pending[c.name]) {
+                        return "pending"
+                    }
+                }
+                return d.valid
+            },
+            minlength: function (c, b, d) {
+                return this.optional(b) || this.getLength(a.trim(c), b) >= d
+            },
+            maxlength: function (c, b, d) {
+                return this.optional(b) || this.getLength(a.trim(c), b) <= d
+            },
+            rangelength: function (d, b, e) {
+                var c = this.getLength(a.trim(d), b);
+                return this.optional(b) || (c >= e[0] && c <= e[1])
+            },
+            min: function (c, b, d) {
+                return this.optional(b) || c >= d
+            },
+            max: function (c, b, d) {
+                return this.optional(b) || c <= d
+            },
+            range: function (c, b, d) {
+                return this.optional(b) || (c >= d[0] && c <= d[1])
+            },
+            email: function (c, b) {
+                return this.optional(b) || /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i.test(c)
+            },
+            url: function (c, b) {
+                return this.optional(b) || /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(c)
+            },
+            date: function (c, b) {
+                return this.optional(b) || !/Invalid|NaN/.test(new Date(c))
+            },
+            dateISO: function (c, b) {
+                return this.optional(b) || /^\d{4}[\/-]\d{1,2}[\/-]\d{1,2}$/.test(c)
+            },
+            dateDE: function (c, b) {
+                return this.optional(b) || /^\d\d?\.\d\d?\.\d\d\d?\d?$/.test(c)
+            },
+            number: function (c, b) {
+                return this.optional(b) || /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/.test(c)
+            },
+            numberDE: function (c, b) {
+                return this.optional(b) || /^-?(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d+)?$/.test(c)
+            },
+            digits: function (c, b) {
+                return this.optional(b) || /^\d+$/.test(c)
+            },
+            creditcard: function (f, c) {
+                if (this.optional(c)) {
+                    return "dependency-mismatch"
+                }
+                if (/[^0-9-]+/.test(f)) {
+                    return false
+                }
+                var g = 0,
+                    e = 0,
+                    b = false;
+                f = f.replace(/\D/g, "");
+                for (n = f.length - 1; n >= 0; n--) {
+                    var d = f.charAt(n);
+                    var e = parseInt(d, 10);
+                    if (b) {
+                        if ((e *= 2) > 9) {
+                            e -= 9
+                        }
+                    }
+                    g += e;
+                    b = !b
+                }
+                return (g % 10) == 0
+            },
+            accept: function (c, b, d) {
+                d = typeof d == "string" ? d.replace(/,/g, "|") : "png|jpe?g|gif";
+                return this.optional(b) || c.match(new RegExp(".(" + d + ")$", "i"))
+            },
+            equalTo: function (c, b, d) {
+                return c == a(d).val()
+            }
+        }
+    });
+    a.format = a.validator.format
+})(jQuery);
+(function (c) {
+    var b = c.ajax;
+    var a = {};
+    c.ajax = function (e) {
+        e = c.extend(e, c.extend({}, c.ajaxSettings, e));
+        var d = e.port;
+        if (e.mode == "abort") {
+            if (a[d]) {
+                a[d].abort()
+            }
+            return (a[d] = b.apply(this, arguments))
+        }
+        return b.apply(this, arguments)
+    }
+})(jQuery);
+
+(function (a) {
+    a.fn.extend({
+        scrollable: function (d, c, b) {
+            return this.each(function () {
+                if (typeof d == "string") {
+                    var e = a.data(this, "scrollable");
+                    e[d].apply(e, [c, b])
+                } else {
+                    new a.scrollable(this, d, c)
+                }
+            })
+        }
+    });
+    a.scrollable = function (b, c) {
+        a.data(b, "scrollable", this);
+        this.init(b, c)
+    };
+    a.extend(a.scrollable.prototype, {
+        init: function (d, e) {
+            var j = this;
+            var b = {
+                size: 6,
+                horizontal: false,
+                activeClass: "active",
+                speed: 300,
+                onSeek: null,
+                items: ".items",
+                prev: ".prev",
+                next: ".next",
+                navi: ".navi",
+                naviItem: "span"
+            };
+            this.opts = a.extend(b, e);
+            var i = this.root = a(d);
+            var h = a(b.items, i);
+            if (!h.length) {
+                h = i
+            }
+            h.css({
+                position: "relative",
+                overflow: "hidden",
+                visibility: "visible"
+            });
+            var c = h.children().attr("class");
+            if (c != "__scrollable") {
+                h.children().wrapAll('<div class="__scrollable" style="position:absolute;left:0;"/>');
+                this.wrap = h.children(":first");
+                this.wrap.css(b.horizontal ? "width" : "height", "200000em").after('<br clear="all"/>');
+                this.items = this.wrap.children()
+            } else {
+                this.items = h.children()
+            }
+            this.index = 0;
+            var g = a.isFunction(a.fn.mousewheel);
+            var f = this.items.size() - this.opts.size;
+            if (f <= 0) {
+                a(this.opts.prev, this.root).css("visibility", "hidden");
+                a(this.opts.next, this.root).css("visibility", "hidden");
+                g = false
+            } else {
+                if (b.horizontal) {
+                    h.width(b.size * (this.items.eq(1).offset().left - this.items.eq(0).offset().left) - 2)
+                } else {
+                    h.height(b.size * (this.items.eq(1).offset().top - this.items.eq(0).offset().top) - 2)
+                }
+                this.showArrow(this.index)
+            } if (g) {
+                i.bind("mousewheel.scrollable", function (k, l) {
+                    j.move(-l, 50);
+                    return false
+                })
+            }
+            a(window).bind("keypress.scrollable", function (k) {
+                if (a(k.target).parents(".__scrollable").length) {
+                    if (b.horizontal && (k.keyCode == 37 || k.keyCode == 39)) {
+                        j.move(k.keyCode == 37 ? -1 : 1);
+                        return false
+                    }
+                    if (!b.horizontal && (k.keyCode == 38 || k.keyCode == 40)) {
+                        j.move(k.keyCode == 38 ? -1 : 1);
+                        return false
+                    }
+                }
+                return true
+            });
+            this.items.each(function (l, k) {
+                a(this).bind("click.scrollable", function () {
+                    j.click(l)
+                })
+            });
+            this.activeIndex = 0;
+            a(b.prev, i).click(function () {
+                j.prev()
+            });
+            a(b.next, i).click(function () {
+                j.next()
+            });
+            a(b.navi, i).each(function () {
+                var o = a(this);
+                var k = j.getStatus();
+                if (o.is(":empty")) {
+                    for (var l = 0; l < k.pages; l++) {
+                        var m = a("<" + b.naviItem + "/>").attr("page", l).click(function () {
+                            var p = a(this);
+                            p.parent().children().removeClass(b.activeClass);
+                            p.addClass(b.activeClass);
+                            j.setPage(p.attr("page"))
+                        });
+                        if (l == 0) {
+                            m.addClass(b.activeClass)
+                        }
+                        o.append(m)
+                    }
+                } else {
+                    o.children().each(function (p) {
+                        var q = a(this);
+                        q.attr("page", p);
+                        if (p == 0) {
+                            q.addClass(b.activeClass)
+                        }
+                        q.click(function () {
+                            q.parent().children().removeClass(b.activeClass);
+                            q.addClass(b.activeClass);
+                            j.setPage(q.attr("page"))
+                        })
+                    })
+                }
+            })
+        },
+        click: function (c) {
+            var d = this.items.eq(c);
+            var b = this.opts.activeClass
+        },
+        getStatus: function () {
+            var b = this.items.size();
+            var c = {
+                length: b,
+                index: this.index,
+                size: this.opts.size,
+                pages: Math.round(b / this.opts.size),
+                page: Math.round(this.index / this.opts.size)
+            };
+            return c
+        },
+        seekTo: function (c, i) {
+            if (c < 0) {
+                c = 0
+            }
+            c = Math.min(c, this.items.length - this.opts.size);
+            var e = this.items.eq(c);
+            if (e.size() == 0) {
+                return false
+            }
+            this.index = c;
+            if (this.opts.horizontal) {
+                var h = this.wrap.offset().left - e.offset().left;
+                this.wrap.animate({
+                    left: h
+                }, i || this.opts.speed)
+            } else {
+                var g = this.wrap.offset().top - e.offset().top;
+                this.wrap.animate({
+                    top: g
+                }, i || this.opts.speed)
+            } if (a.isFunction(this.opts.onSeek)) {
+                this.opts.onSeek.call(this.getStatus())
+            }
+            var d = a(this.opts.navi, this.root);
+            if (d.length) {
+                var b = this.opts.activeClass;
+                var f = Math.round(c / this.opts.size);
+                d.children().removeClass(b).eq(f).addClass(b)
+            }
+            this.showArrow(this.index);
+            return true
+        },
+        showArrow: function (b) {
+            this.index = b;
+            var e = this.items.size() - this.opts.size;
+            var c = a(this.opts.prev, this.root);
+            var d = a(this.opts.next, this.root);
+            if (this.index == 0) {
+                c.css("visibility", "hidden");
+                d.css("visibility", "visible")
+            } else {
+                if (this.index == e) {
+                    c.css("visibility", "visible");
+                    d.css("visibility", "hidden")
+                } else {
+                    c.css("visibility", "visible");
+                    d.css("visibility", "visible")
+                }
+            }
+        },
+        move: function (c, b) {
+            this.seekTo(this.index + c, b)
+        },
+        next: function (b) {
+            this.move(1, b)
+        },
+        prev: function (b) {
+            this.move(-1, b)
+        },
+        movePage: function (c, b) {
+            this.move(this.opts.size * c, b)
+        },
+        setPage: function (b, c) {
+            this.seekTo(this.opts.size * b, c)
+        },
+        begin: function (b) {
+            this.seekTo(0, b)
+        },
+        end: function (b) {
+            this.seekTo(this.items.size() - this.opts.size, b)
+        }
+    })
+})(jQuery);
+
+function getElementPos(h) {
+    var a = navigator.userAgent.toLowerCase();
+    var b = (a.indexOf("opera") != -1);
+    var e = (a.indexOf("msie") != -1 && !b);
+    var d = document.getElementById(h);
+    if (d == null) {
+        return null
+    }
+    if (d.parentNode === null || d.style.display == "none") {
+        return false
+    }
+    var l = null;
+    var k = [];
+    var i;
+    if (d.getBoundingClientRect) {
+        i = d.getBoundingClientRect();
+        var c = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
+        var f = Math.max(document.documentElement.scrollLeft, document.body.scrollLeft);
+        return {
+            x: i.left + f,
+            y: i.top + c
+        }
+    } else {
+        if (document.getBoxObjectFor) {
+            i = document.getBoxObjectFor(d);
+            var j = (d.style.borderLeftWidth) ? parseInt(d.style.borderLeftWidth) : 0;
+            var g = (d.style.borderTopWidth) ? parseInt(d.style.borderTopWidth) : 0;
+            k = [i.x - j, i.y - g]
+        } else {
+            k = [d.offsetLeft, d.offsetTop];
+            l = d.offsetParent;
+            if (l != d) {
+                while (l) {
+                    k[0] += l.offsetLeft;
+                    k[1] += l.offsetTop;
+                    l = l.offsetParent
+                }
+            }
+            if (a.indexOf("opera") != -1 || (a.indexOf("safari") != -1 && d.style.position == "absolute")) {
+                k[0] -= document.body.offsetLeft;
+                k[1] -= document.body.offsetTop
+            }
+        }
+    } if (d.parentNode) {
+        l = d.parentNode
+    } else {
+        l = null
+    }
+    while (l && l.tagName != "BODY" && l.tagName != "HTML") {
+        k[0] -= l.scrollLeft;
+        k[1] -= l.scrollTop;
+        if (l.parentNode) {
+            l = l.parentNode
+        } else {
+            l = null
+        }
+    }
+    return {
+        x: k[0],
+        y: k[1]
+    }
+}
+
+function highlight_firstMenu() {
+    var b = document.getElementById("sitemapinfo");
+    if (b) {
+        var c = b.getElementsByTagName("a");
+        if (c && c.length > 2) {
+            var a = document.getElementById(c[2].title);
+            if (a) {
+                a.className = "selected default"
+            }
+        }
+    }
+}
+
+function reset_footer_position() {
+    var a = document.getElementById("foot");
+    if (a) {
+        var b = getElementPos("footer_top_dynamic");
+        if (b == null) {
+            b = getElementPos("footer_top_static")
+        }
+        if (navigator.userAgent.indexOf("MSIE") > 0) {
+            a.style.left = document.body.offsetLeft;
+            var c;
+            if (document.documentElement.clientHeight < document.documentElement.scrollHeight) {
+                c = document.documentElement.scrollHeight
+            } else {
+                c = document.documentElement.clientHeight
+            } if (b.y - c < 0) {
+                a.style.top = c
+            } else {
+                a.style.top = b.y
+            }
+        } else {
+            a.style.left = document.body.offsetLeft + "px";
+            if (b.y - (document.documentElement.scrollHeight) < 0) {
+                a.style.top = (document.documentElement.scrollHeight) + "px"
+            } else {
+                a.style.top = b.y + "px"
+            }
+        }
+        a.style.display = "block"
+    }
+}
+var swfobject = function () {
+    var aq = "undefined",
+        aD = "object",
+        ab = "Shockwave Flash",
+        X = "ShockwaveFlash.ShockwaveFlash",
+        aE = "application/x-shockwave-flash",
+        ac = "SWFObjectExprInst",
+        ax = "onreadystatechange",
+        af = window,
+        aL = document,
+        aB = navigator,
+        aa = false,
+        Z = [aN],
+        aG = [],
+        ag = [],
+        al = [],
+        aJ, ad, ap, at, ak = false,
+        aU = false,
+        aH, an, aI = true,
+        ah = function () {
+            var a = typeof aL.getElementById != aq && typeof aL.getElementsByTagName != aq && typeof aL.createElement != aq,
+                e = aB.userAgent.toLowerCase(),
+                c = aB.platform.toLowerCase(),
+                h = c ? /win/.test(c) : /win/.test(e),
+                j = c ? /mac/.test(c) : /mac/.test(e),
+                g = /webkit/.test(e) ? parseFloat(e.replace(/^.*webkit\/(\d+(\.\d+)?).*$/, "$1")) : false,
+                d = !+"\v1",
+                f = [0, 0, 0],
+                k = null;
+            if (typeof aB.plugins != aq && typeof aB.plugins[ab] == aD) {
+                k = aB.plugins[ab].description;
+                if (k && !(typeof aB.mimeTypes != aq && aB.mimeTypes[aE] && !aB.mimeTypes[aE].enabledPlugin)) {
+                    aa = true;
+                    d = false;
+                    k = k.replace(/^.*\s+(\S+\s+\S+$)/, "$1");
+                    f[0] = parseInt(k.replace(/^(.*)\..*$/, "$1"), 10);
+                    f[1] = parseInt(k.replace(/^.*\.(.*)\s.*$/, "$1"), 10);
+                    f[2] = /[a-zA-Z]/.test(k) ? parseInt(k.replace(/^.*[a-zA-Z]+(.*)$/, "$1"), 10) : 0
+                }
+            } else {
+                if (typeof af.ActiveXObject != aq) {
+                    try {
+                        var i = new ActiveXObject(X);
+                        if (i) {
+                            k = i.GetVariable("$version");
+                            if (k) {
+                                d = true;
+                                k = k.split(" ")[1].split(",");
+                                f = [parseInt(k[0], 10), parseInt(k[1], 10), parseInt(k[2], 10)]
+                            }
+                        }
+                    } catch (b) {}
+                }
+            }
+            return {
+                w3: a,
+                pv: f,
+                wk: g,
+                ie: d,
+                win: h,
+                mac: j
+            }
+        }(),
+        aK = function () {
+            if (!ah.w3) {
+                return
+            }
+            if ((typeof aL.readyState != aq && aL.readyState == "complete") || (typeof aL.readyState == aq && (aL.getElementsByTagName("body")[0] || aL.body))) {
+                aP()
+            }
+            if (!ak) {
+                if (typeof aL.addEventListener != aq) {
+                    aL.addEventListener("DOMContentLoaded", aP, false)
+                }
+                if (ah.ie && ah.win) {
+                    aL.attachEvent(ax, function () {
+                        if (aL.readyState == "complete") {
+                            aL.detachEvent(ax, arguments.callee);
+                            aP()
+                        }
+                    });
+                    if (af == top) {
+                        (function () {
+                            if (ak) {
+                                return
+                            }
+                            try {
+                                aL.documentElement.doScroll("left")
+                            } catch (a) {
+                                setTimeout(arguments.callee, 0);
+                                return
+                            }
+                            aP()
+                        })()
+                    }
+                }
+                if (ah.wk) {
+                    (function () {
+                        if (ak) {
+                            return
+                        }
+                        if (!/loaded|complete/.test(aL.readyState)) {
+                            setTimeout(arguments.callee, 0);
+                            return
+                        }
+                        aP()
+                    })()
+                }
+                aC(aP)
+            }
+        }();
+
+    function aP() {
+        if (ak) {
+            return
+        }
+        try {
+            var b = aL.getElementsByTagName("body")[0].appendChild(ar("span"));
+            b.parentNode.removeChild(b)
+        } catch (a) {
+            return
+        }
+        ak = true;
+        var d = Z.length;
+        for (var c = 0; c < d; c++) {
+            Z[c]()
+        }
+    }
+
+    function aj(a) {
+        if (ak) {
+            a()
+        } else {
+            Z[Z.length] = a
+        }
+    }
+
+    function aC(a) {
+        if (typeof af.addEventListener != aq) {
+            af.addEventListener("load", a, false)
+        } else {
+            if (typeof aL.addEventListener != aq) {
+                aL.addEventListener("load", a, false)
+            } else {
+                if (typeof af.attachEvent != aq) {
+                    aM(af, "onload", a)
+                } else {
+                    if (typeof af.onload == "function") {
+                        var b = af.onload;
+                        af.onload = function () {
+                            b();
+                            a()
+                        }
+                    } else {
+                        af.onload = a
+                    }
+                }
+            }
+        }
+    }
+
+    function aN() {
+        if (aa) {
+            Y()
+        } else {
+            am()
+        }
+    }
+
+    function Y() {
+        var d = aL.getElementsByTagName("body")[0];
+        var b = ar(aD);
+        b.setAttribute("type", aE);
+        var a = d.appendChild(b);
+        if (a) {
+            var c = 0;
+            (function () {
+                if (typeof a.GetVariable != aq) {
+                    var e = a.GetVariable("$version");
+                    if (e) {
+                        e = e.split(" ")[1].split(",");
+                        ah.pv = [parseInt(e[0], 10), parseInt(e[1], 10), parseInt(e[2], 10)]
+                    }
+                } else {
+                    if (c < 10) {
+                        c++;
+                        setTimeout(arguments.callee, 10);
+                        return
+                    }
+                }
+                d.removeChild(b);
+                a = null;
+                am()
+            })()
+        } else {
+            am()
+        }
+    }
+
+    function am() {
+        var g = aG.length;
+        if (g > 0) {
+            for (var h = 0; h < g; h++) {
+                var c = aG[h].id;
+                var l = aG[h].callbackFn;
+                var a = {
+                    success: false,
+                    id: c
+                };
+                if (ah.pv[0] > 0) {
+                    var i = aS(c);
+                    if (i) {
+                        if (ao(aG[h].swfVersion) && !(ah.wk && ah.wk < 312)) {
+                            ay(c, true);
+                            if (l) {
+                                a.success = true;
+                                a.ref = av(c);
+                                l(a)
+                            }
+                        } else {
+                            if (aG[h].expressInstall && au()) {
+                                var e = {};
+                                e.data = aG[h].expressInstall;
+                                e.width = i.getAttribute("width") || "0";
+                                e.height = i.getAttribute("height") || "0";
+                                if (i.getAttribute("class")) {
+                                    e.styleclass = i.getAttribute("class")
+                                }
+                                if (i.getAttribute("align")) {
+                                    e.align = i.getAttribute("align")
+                                }
+                                var f = {};
+                                var d = i.getElementsByTagName("param");
+                                var k = d.length;
+                                for (var j = 0; j < k; j++) {
+                                    if (d[j].getAttribute("name").toLowerCase() != "movie") {
+                                        f[d[j].getAttribute("name")] = d[j].getAttribute("value")
+                                    }
+                                }
+                                ae(e, f, c, l)
+                            } else {
+                                aF(i);
+                                if (l) {
+                                    l(a)
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    ay(c, true);
+                    if (l) {
+                        var b = av(c);
+                        if (b && typeof b.SetVariable != aq) {
+                            a.success = true;
+                            a.ref = b
+                        }
+                        l(a)
+                    }
+                }
+            }
+        }
+    }
+
+    function av(b) {
+        var d = null;
+        var c = aS(b);
+        if (c && c.nodeName == "OBJECT") {
+            if (typeof c.SetVariable != aq) {
+                d = c
+            } else {
+                var a = c.getElementsByTagName(aD)[0];
+                if (a) {
+                    d = a
+                }
+            }
+        }
+        return d
+    }
+
+    function au() {
+        return !aU && ao("6.0.65") && (ah.win || ah.mac) && !(ah.wk && ah.wk < 312)
+    }
+
+    function ae(f, d, h, e) {
+        aU = true;
+        ap = e || null;
+        at = {
+            success: false,
+            id: h
+        };
+        var a = aS(h);
+        if (a) {
+            if (a.nodeName == "OBJECT") {
+                aJ = aO(a);
+                ad = null
+            } else {
+                aJ = a;
+                ad = h
+            }
+            f.id = ac;
+            if (typeof f.width == aq || (!/%$/.test(f.width) && parseInt(f.width, 10) < 310)) {
+                f.width = "310"
+            }
+            if (typeof f.height == aq || (!/%$/.test(f.height) && parseInt(f.height, 10) < 137)) {
+                f.height = "137"
+            }
+            aL.title = aL.title.slice(0, 47) + " - Flash Player Installation";
+            var b = ah.ie && ah.win ? "ActiveX" : "PlugIn",
+                c = "MMredirectURL=" + af.location.toString().replace(/&/g, "%26") + "&MMplayerType=" + b + "&MMdoctitle=" + aL.title;
+            if (typeof d.flashvars != aq) {
+                d.flashvars += "&" + c
+            } else {
+                d.flashvars = c
+            } if (ah.ie && ah.win && a.readyState != 4) {
+                var g = ar("div");
+                h += "SWFObjectNew";
+                g.setAttribute("id", h);
+                a.parentNode.insertBefore(g, a);
+                a.style.display = "none";
+                (function () {
+                    if (a.readyState == 4) {
+                        a.parentNode.removeChild(a)
+                    } else {
+                        setTimeout(arguments.callee, 10)
+                    }
+                })()
+            }
+            aA(f, d, h)
+        }
+    }
+
+    function aF(a) {
+        if (ah.ie && ah.win && a.readyState != 4) {
+            var b = ar("div");
+            a.parentNode.insertBefore(b, a);
+            b.parentNode.replaceChild(aO(a), b);
+            a.style.display = "none";
+            (function () {
+                if (a.readyState == 4) {
+                    a.parentNode.removeChild(a)
+                } else {
+                    setTimeout(arguments.callee, 10)
+                }
+            })()
+        } else {
+            a.parentNode.replaceChild(aO(a), a)
+        }
+    }
+
+    function aO(b) {
+        var d = ar("div");
+        if (ah.win && ah.ie) {
+            d.innerHTML = b.innerHTML
+        } else {
+            var e = b.getElementsByTagName(aD)[0];
+            if (e) {
+                var a = e.childNodes;
+                if (a) {
+                    var f = a.length;
+                    for (var c = 0; c < f; c++) {
+                        if (!(a[c].nodeType == 1 && a[c].nodeName == "PARAM") && !(a[c].nodeType == 8)) {
+                            d.appendChild(a[c].cloneNode(true))
+                        }
+                    }
+                }
+            }
+        }
+        return d
+    }
+
+    function aA(e, g, c) {
+        var d, a = aS(c);
+        if (ah.wk && ah.wk < 312) {
+            return d
+        }
+        if (a) {
+            if (typeof e.id == aq) {
+                e.id = c
+            }
+            if (ah.ie && ah.win) {
+                var f = "";
+                for (var i in e) {
+                    if (e[i] != Object.prototype[i]) {
+                        if (i.toLowerCase() == "data") {
+                            g.movie = e[i]
+                        } else {
+                            if (i.toLowerCase() == "styleclass") {
+                                f += ' class="' + e[i] + '"'
+                            } else {
+                                if (i.toLowerCase() != "classid") {
+                                    f += " " + i + '="' + e[i] + '"'
+                                }
+                            }
+                        }
+                    }
+                }
+                var h = "";
+                for (var j in g) {
+                    if (g[j] != Object.prototype[j]) {
+                        h += '<param name="' + j + '" value="' + g[j] + '" />'
+                    }
+                }
+                a.outerHTML = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"' + f + ">" + h + "</object>";
+                ag[ag.length] = e.id;
+                d = aS(e.id)
+            } else {
+                var b = ar(aD);
+                b.setAttribute("type", aE);
+                for (var k in e) {
+                    if (e[k] != Object.prototype[k]) {
+                        if (k.toLowerCase() == "styleclass") {
+                            b.setAttribute("class", e[k])
+                        } else {
+                            if (k.toLowerCase() != "classid") {
+                                b.setAttribute(k, e[k])
+                            }
+                        }
+                    }
+                }
+                for (var l in g) {
+                    if (g[l] != Object.prototype[l] && l.toLowerCase() != "movie") {
+                        aQ(b, l, g[l])
+                    }
+                }
+                a.parentNode.replaceChild(b, a);
+                d = b
+            }
+        }
+        return d
+    }
+
+    function aQ(b, d, c) {
+        var a = ar("param");
+        a.setAttribute("name", d);
+        a.setAttribute("value", c);
+        b.appendChild(a)
+    }
+
+    function aw(a) {
+        var b = aS(a);
+        if (b && b.nodeName == "OBJECT") {
+            if (ah.ie && ah.win) {
+                b.style.display = "none";
+                (function () {
+                    if (b.readyState == 4) {
+                        aT(a)
+                    } else {
+                        setTimeout(arguments.callee, 10)
+                    }
+                })()
+            } else {
+                b.parentNode.removeChild(b)
+            }
+        }
+    }
+
+    function aT(a) {
+        var b = aS(a);
+        if (b) {
+            for (var c in b) {
+                if (typeof b[c] == "function") {
+                    b[c] = null
+                }
+            }
+            b.parentNode.removeChild(b)
+        }
+    }
+
+    function aS(a) {
+        var c = null;
+        try {
+            c = aL.getElementById(a)
+        } catch (b) {}
+        return c
+    }
+
+    function ar(a) {
+        return aL.createElement(a)
+    }
+
+    function aM(a, c, b) {
+        a.attachEvent(c, b);
+        al[al.length] = [a, c, b]
+    }
+
+    function ao(a) {
+        var b = ah.pv,
+            c = a.split(".");
+        c[0] = parseInt(c[0], 10);
+        c[1] = parseInt(c[1], 10) || 0;
+        c[2] = parseInt(c[2], 10) || 0;
+        return (b[0] > c[0] || (b[0] == c[0] && b[1] > c[1]) || (b[0] == c[0] && b[1] == c[1] && b[2] >= c[2])) ? true : false
+    }
+
+    function az(b, f, a, c) {
+        if (ah.ie && ah.mac) {
+            return
+        }
+        var e = aL.getElementsByTagName("head")[0];
+        if (!e) {
+            return
+        }
+        var g = (a && typeof a == "string") ? a : "screen";
+        if (c) {
+            aH = null;
+            an = null
+        }
+        if (!aH || an != g) {
+            var d = ar("style");
+            d.setAttribute("type", "text/css");
+            d.setAttribute("media", g);
+            aH = e.appendChild(d);
+            if (ah.ie && ah.win && typeof aL.styleSheets != aq && aL.styleSheets.length > 0) {
+                aH = aL.styleSheets[aL.styleSheets.length - 1]
+            }
+            an = g
+        }
+        if (ah.ie && ah.win) {
+            if (aH && typeof aH.addRule == aD) {
+                aH.addRule(b, f)
+            }
+        } else {
+            if (aH && typeof aL.createTextNode != aq) {
+                aH.appendChild(aL.createTextNode(b + " {" + f + "}"))
+            }
+        }
+    }
+
+    function ay(a, c) {
+        if (!aI) {
+            return
+        }
+        var b = c ? "visible" : "hidden";
+        if (ak && aS(a)) {
+            aS(a).style.visibility = b
+        } else {
+            az("#" + a, "visibility:" + b)
+        }
+    }
+
+    function ai(b) {
+        var a = /[\\\"<>\.;]/;
+        var c = a.exec(b) != null;
+        return c && typeof encodeURIComponent != aq ? encodeURIComponent(b) : b
+    }
+    var aR = function () {
+        if (ah.ie && ah.win) {
+            window.attachEvent("onunload", function () {
+                var a = al.length;
+                for (var b = 0; b < a; b++) {
+                    al[b][0].detachEvent(al[b][1], al[b][2])
+                }
+                var d = ag.length;
+                for (var c = 0; c < d; c++) {
+                    aw(ag[c])
+                }
+                for (var e in ah) {
+                    ah[e] = null
+                }
+                ah = null;
+                for (var f in swfobject) {
+                    swfobject[f] = null
+                }
+                swfobject = null
+            })
+        }
+    }();
+    return {
+        registerObject: function (a, e, c, b) {
+            if (ah.w3 && a && e) {
+                var d = {};
+                d.id = a;
+                d.swfVersion = e;
+                d.expressInstall = c;
+                d.callbackFn = b;
+                aG[aG.length] = d;
+                ay(a, false)
+            } else {
+                if (b) {
+                    b({
+                        success: false,
+                        id: a
+                    })
+                }
+            }
+        },
+        getObjectById: function (a) {
+            if (ah.w3) {
+                return av(a)
+            }
+        },
+        embedSWF: function (k, e, h, f, c, a, b, i, g, j) {
+            var d = {
+                success: false,
+                id: e
+            };
+            if (ah.w3 && !(ah.wk && ah.wk < 312) && k && e && h && f && c) {
+                ay(e, false);
+                aj(function () {
+                    h += "";
+                    f += "";
+                    var r = {};
+                    if (g && typeof g === aD) {
+                        for (var p in g) {
+                            r[p] = g[p]
+                        }
+                    }
+                    r.data = k;
+                    r.width = h;
+                    r.height = f;
+                    var o = {};
+                    if (i && typeof i === aD) {
+                        for (var q in i) {
+                            o[q] = i[q]
+                        }
+                    }
+                    if (b && typeof b === aD) {
+                        for (var l in b) {
+                            if (typeof o.flashvars != aq) {
+                                o.flashvars += "&" + l + "=" + b[l]
+                            } else {
+                                o.flashvars = l + "=" + b[l]
+                            }
+                        }
+                    }
+                    if (ao(c)) {
+                        var m = aA(r, o, e);
+                        if (r.id == e) {
+                            ay(e, true)
+                        }
+                        d.success = true;
+                        d.ref = m
+                    } else {
+                        if (a && au()) {
+                            r.data = a;
+                            ae(r, o, e, j);
+                            return
+                        } else {
+                            ay(e, true)
+                        }
+                    } if (j) {
+                        j(d)
+                    }
+                })
+            } else {
+                if (j) {
+                    j(d)
+                }
+            }
+        },
+        switchOffAutoHideShow: function () {
+            aI = false
+        },
+        ua: ah,
+        getFlashPlayerVersion: function () {
+            return {
+                major: ah.pv[0],
+                minor: ah.pv[1],
+                release: ah.pv[2]
+            }
+        },
+        hasFlashPlayerVersion: ao,
+        createSWF: function (a, b, c) {
+            if (ah.w3) {
+                return aA(a, b, c)
+            } else {
+                return undefined
+            }
+        },
+        showExpressInstall: function (b, a, d, c) {
+            if (ah.w3 && au()) {
+                ae(b, a, d, c)
+            }
+        },
+        removeSWF: function (a) {
+            if (ah.w3) {
+                aw(a)
+            }
+        },
+        createCSS: function (b, a, c, d) {
+            if (ah.w3) {
+                az(b, a, c, d)
+            }
+        },
+        addDomLoadEvent: aj,
+        addLoadEvent: aC,
+        getQueryParamValue: function (b) {
+            var a = aL.location.search || aL.location.hash;
+            if (a) {
+                if (/\?/.test(a)) {
+                    a = a.split("?")[1]
+                }
+                if (b == null) {
+                    return ai(a)
+                }
+                var c = a.split("&");
+                for (var d = 0; d < c.length; d++) {
+                    if (c[d].substring(0, c[d].indexOf("=")) == b) {
+                        return ai(c[d].substring((c[d].indexOf("=") + 1)))
+                    }
+                }
+            }
+            return ""
+        },
+        expressInstallCallback: function () {
+            if (aU) {
+                var a = aS(ac);
+                if (a && aJ) {
+                    a.parentNode.replaceChild(aJ, a);
+                    if (ad) {
+                        ay(ad, true);
+                        if (ah.ie && ah.win) {
+                            aJ.style.display = "block"
+                        }
+                    }
+                    if (ap) {
+                        ap(at)
+                    }
+                }
+                aU = false
+            }
+        }
+    }
+}();
+var navflashvars = {};
+var navparams = {};
+navparams.menu = "false";
+navparams.bgcolor = "#ffffff";
+navparams.quality = "high";
+navparams.scale = "noborder";
+navparams.wmode = "transparent";
+var navattributes = {};
+var ui = {
+    winopen: function (e) {
+        var d = !e.src ? "" : e.src;
+        var a = !e.href ? "#" : e.href;
+        var c = !e.title ? "" : e.title;
+        var b = window.open("", "barWindow", "resizable=yes,menubar=1,toolbar=1,top=100, left=0,status=1,titleba=1, location=1,status=1,scrollbars=yes,width=440px,height=500px");
+        b.document.write("<html>");
+        b.document.write("<TITLE>" + c + "</TITLE>");
+        b.document.write("<BODY style='margin:0;padding:0;'>");
+        b.document.write("<a href='" + a + "' target='_blank'><img src='" + d + "'  border='0' /></a>");
+        b.document.write("</BODY>");
+        b.document.write("</HTML>");
+        b.document.close()
+    },
+    loadbar: function (a) {
+        window.open(a, "barWindow", "resizable=yes,menubar=1,toolbar=1,status=1,titleba=1, location=0,status=1,scrollbars=yes,width=1020px")
+    }
+};
+
+function $(a) {
+    return document.getElementById(a)
+}
+
+function findPosition(d) {
+    var b = 0;
+    var c = 0;
+    var e = d.offsetWidth;
+    var a = d.offsetHeight;
+    if (typeof (d.offsetParent) != "undefined") {
+        for (var g = 0, f = 0; d; d = d.offsetParent) {
+            g += d.offsetLeft;
+            f += d.offsetTop
+        }
+        b = g + e;
+        c = f + a;
+        return [g, f, b, c]
+    } else {
+        b = d.x + e;
+        c = d.y + a;
+        return [d.x, d.y, b, c]
+    }
+}
+
+function loadOption(a, e, d) {
+    $(d).innerHTML = '<div id="' + e + '_Select" class="proindexselect"><a href="javascript:void(0)" onFocus="block_Opt(this,\'' + e + "')\" onBlur=\"none_Opt('" + e + '\')" class="sel_a"><span id="' + e + '_Select_val" class="proindexselect_val">Load...</span><input name="' + e + '" type="hidden" id="' + e + '"/><img src="images/default/proindex_arrow.gif" width="17" height="17" align="absbottom" class="sm_pic" /></a><div id="' + e + '_Option" class="proindexoption"></div></div>';
+    var b = 0;
+    var c = "";
+    for (opt in a) {
+        if (a[opt][2]) {
+            b = opt
+        }
+        $(e).value = a[b][1];
+        c += '<a href="javascript:void(0)" onmousedown="setOptval(\'' + e + "','" + a[opt] + "')\">&nbsp;" + a[opt][0] + "</a>"
+    }!document.all ? $(e + "_Select_val").textContent = a[b][0] : $(e + "_Select_val").innerText = a[b][0];
+    $(e + "_Option").innerHTML = c
+}
+
+function block_Opt(c, b) {
+    var a = findPosition(c);
+    $(b + "_Option").style.top = a[1] + 22 + "px";
+    $(b + "_Option").style.left = a[0] + "px";
+    $(b + "_Option").style.width = a[2] - a[0] + "px";
+    $(b + "_Option").style.display = "block"
+}
+
+function none_Opt(a) {
+    setTimeout("$('" + a + "_Option').style.display='none'", 200)
+}
+
+function setOptval(a, b) {
+    b = b.split(",");
+    !document.all ? $(a + "_Select_val").textContent = b[0] : $(a + "_Select_val").innerText = b[0];
+    $(a).value = b[1]
+}
+
+function isEmail(c) {
+    if (c == null) {
+        return false
+    }
+    if (c.length <= 0) {
+        return false
+    }
+    if (c.indexOf("@") < 1) {
+        return false
+    }
+    var b = c.substring(c.indexOf("@") + 1);
+    if (b == null || b.length < 1) {
+        return false
+    }
+    if (b.indexOf(".") < 1) {
+        return false
+    }
+    var a = b.substring(b.indexOf(".") + 1);
+    if (a == null || a.length < 1) {
+        return false
+    }
+    return true
+}
+
+function checkemailformat(b) {
+    var a = document.getElementById(b);
+    if (a) {
+        if (isEmail(a.value)) {
+            return true
+        } else {
+            alert("邮件格式不对！");
+            return false
+        }
+    } else {
+        return false
+    }
+}
+
+function mail_subscription() {
+    if (document.forms.subscribeForm && document.forms.subscribeForm.submitmail) {
+        if (isEmail(document.forms.subscribeForm.submitmail.value)) {
+            alert("邮件订阅成功！");
+            return true
+        } else {
+            alert("邮件格式不对！");
+            return false
+        }
+    } else {
+        return false
+    }
+}
+var tabdropdown = {
+    disappeardelay: 500,
+    disablemenuclick: false,
+    enableiframeshim: 1,
+    dropmenuobj: null,
+    ie: document.all,
+    firefox: document.getElementById && !document.all,
+    previousmenuitem: null,
+    currentpageurl: window.location.href.replace("http://" + window.location.hostname, "").replace(/^\//, ""),
+    getposOffset: function (d, c) {
+        var b = (c == "left") ? d.offsetLeft : d.offsetTop;
+        var a = d.offsetParent;
+        while (a != null) {
+            b = (c == "left") ? b + a.offsetLeft : b + a.offsetTop;
+            a = a.offsetParent
+        }
+        return b
+    },
+    showhide: function (c, b, a) {
+        if (this.ie || this.firefox) {
+            this.dropmenuobj.style.left = this.dropmenuobj.style.top = "-500px"
+        }
+        if (b.type == "click" && c.visibility == "hidden" || b.type == "mouseover") {
+            if (a.parentNode.className.indexOf("default") == -1) {
+                a.parentNode.className = "selected"
+            }
+            c.visibility = "visible"
+        } else {
+            if (b.type == "click") {
+                c.visibility = "hidden"
+            }
+        }
+    },
+    iecompattest: function () {
+        return (document.compatMode && document.compatMode != "BackCompat") ? document.documentElement : document.body
+    },
+    clearbrowseredge: function (e, c) {
+        var b = 0;
+        if (c == "rightedge") {
+            var d = this.ie && !window.opera ? this.standardbody.scrollLeft + this.standardbody.clientWidth - 15 : window.pageXOffset + window.innerWidth - 15;
+            this.dropmenuobj.contentmeasure = this.dropmenuobj.offsetWidth;
+            if (d - this.dropmenuobj.x < this.dropmenuobj.contentmeasure) {
+                b = this.dropmenuobj.contentmeasure - e.offsetWidth
+            }
+        } else {
+            var a = this.ie && !window.opera ? this.standardbody.scrollTop : window.pageYOffset;
+            var d = this.ie && !window.opera ? this.standardbody.scrollTop + this.standardbody.clientHeight - 15 : window.pageYOffset + window.innerHeight - 18;
+            this.dropmenuobj.contentmeasure = this.dropmenuobj.offsetHeight;
+            if (d - this.dropmenuobj.y < this.dropmenuobj.contentmeasure) {
+                b = this.dropmenuobj.contentmeasure + e.offsetHeight;
+                if ((this.dropmenuobj.y - a) < this.dropmenuobj.contentmeasure) {
+                    b = this.dropmenuobj.y + e.offsetHeight - a
+                }
+            }
+            this.dropmenuobj.firstlink.style.borderTopWidth = (b == 0) ? 0 : "1px"
+        }
+        return b
+    },
+    dropit: function (c, b, a) {
+        if (this.dropmenuobj != null) {
+            this.dropmenuobj.style.visibility = "hidden";
+            if (this.previousmenuitem != null && this.previousmenuitem != c) {
+                if (this.previousmenuitem.parentNode.className.indexOf("default") == -1) {
+                    this.previousmenuitem.parentNode.className = ""
+                }
+            }
+        }
+        this.clearhidemenu();
+        if (this.ie || this.firefox) {
+            c.onmouseout = function () {
+                tabdropdown.delayhidemenu(c)
+            };
+            c.onclick = function () {
+                return !tabdropdown.disablemenuclick
+            };
+            this.dropmenuobj = document.getElementById(a);
+            this.dropmenuobj.onmouseover = function () {
+                tabdropdown.clearhidemenu()
+            };
+            this.dropmenuobj.onmouseout = function (d) {
+                tabdropdown.dynamichide(d, c)
+            };
+            this.dropmenuobj.onclick = function () {};
+            this.showhide(this.dropmenuobj.style, b, c);
+            this.dropmenuobj.x = this.getposOffset(c, "left");
+            this.dropmenuobj.y = this.getposOffset(c, "top");
+            this.dropmenuobj.style.left = this.dropmenuobj.x - this.clearbrowseredge(c, "rightedge") + "px";
+            this.dropmenuobj.style.top = this.dropmenuobj.y - this.clearbrowseredge(c, "bottomedge") + c.offsetHeight + 1 + "px";
+            this.previousmenuitem = c;
+            this.positionshim()
+        }
+    },
+    contains_firefox: function (d, c) {
+        while (c.parentNode) {
+            if ((c = c.parentNode) == d) {
+                return true
+            }
+        }
+        return false
+    },
+    dynamichide: function (c, b) {
+        var a = window.event ? window.event : c;
+        if (this.ie && !this.dropmenuobj.contains(a.toElement)) {
+            if (a.srcElement.id != "AveneBBS_UserName") {
+                this.delayhidemenu(b)
+            }
+        } else {
+            if (this.firefox && c.currentTarget != a.relatedTarget && !this.contains_firefox(a.currentTarget, a.relatedTarget)) {
+                this.delayhidemenu(b)
+            }
+        }
+    },
+    delayhidemenu: function (a) {
+        this.delayhide = setTimeout(function () {
+            tabdropdown.dropmenuobj.style.visibility = "hidden";
+            if (a.parentNode.className.indexOf("default") == -1) {
+                a.parentNode.className = ""
+            }
+        }, this.disappeardelay)
+    },
+    clearhidemenu: function () {
+        if (this.delayhide != "undefined") {
+            clearTimeout(this.delayhide)
+        }
+    },
+    positionshim: function () {
+        if (this.enableiframeshim && typeof this.shimobject != "undefined") {
+            if (this.dropmenuobj.style.visibility == "visible") {
+                this.shimobject.style.width = this.dropmenuobj.offsetWidth + "px";
+                this.shimobject.style.height = this.dropmenuobj.offsetHeight + "px";
+                this.shimobject.style.left = this.dropmenuobj.style.left;
+                this.shimobject.style.top = this.dropmenuobj.style.top
+            }
+            this.shimobject.style.display = (this.dropmenuobj.style.visibility == "visible") ? "block" : "none"
+        }
+    },
+    hideshim: function () {
+        if (this.enableiframeshim && typeof this.shimobject != "undefined") {
+            this.shimobject.style.display = "none"
+        }
+    },
+    isSelected: function (a) {
+        var a = a.replace("http://" + a.hostname, "").replace(/^\//, "");
+        return (tabdropdown.currentpageurl == a)
+    },
+    init: function (e, c) {
+        this.standardbody = (document.compatMode == "CSS1Compat") ? document.documentElement : document.body;
+        var g = document.getElementById(e);
+        if (g == null || g == undefined) {
+            return
+        }
+        var f = document.getElementById(e).getElementsByTagName("a");
+        for (var d = 0; d < f.length; d++) {
+            if (f[d].getAttribute("rel")) {
+                var a = f[d].getAttribute("rel");
+                document.getElementById(a).firstlink = document.getElementById(a).getElementsByTagName("a")[0];
+                f[d].onmouseover = function (i) {
+                    var h = typeof i != "undefined" ? i : window.event;
+                    tabdropdown.dropit(this, h, this.getAttribute("rel"))
+                }
+            }
+            if (c == "auto" && typeof b == "undefined" && this.isSelected(f[d].href)) {
+                f[d].parentNode.className += " selected default";
+                var b = true
+            } else {
+                if (parseInt(c) == d) {
+                    f[d].parentNode.className += " selected default"
+                }
+            }
+        }
+    }
+};
+if (document.getElementById("defaultheaderright")) {
+    tabdropdown.init("defaultheaderright")
+}
+if (typeof (highlight_firstMenu) == "undefined") {
+    highlight_firstMenu()
+}
+var clickdropdown = {
+    disappeardelay: 200,
+    disablemenuclick: false,
+    enableiframeshim: 1,
+    dropmenuobj: null,
+    ie: document.all,
+    firefox: document.getElementById && !document.all,
+    previousmenuitem: null,
+    currentpageurl: window.location.href.replace("http://" + window.location.hostname, "").replace(/^\//, ""),
+    getposOffset: function (d, c) {
+        var b = (c == "left") ? d.offsetLeft : d.offsetTop;
+        var a = d.offsetParent;
+        while (a != null) {
+            b = (c == "left") ? b + a.offsetLeft : b + a.offsetTop;
+            a = a.offsetParent
+        }
+        return b
+    },
+    showhide: function (c, b, a) {
+        if (this.ie || this.firefox) {
+            this.dropmenuobj.style.left = this.dropmenuobj.style.top = "-500px"
+        }
+        if (b.type == "click") {
+            if (a.parentNode.className.indexOf("default") == -1) {
+                a.parentNode.className = "selected"
+            }
+            c.visibility = "visible"
+        } else {
+            if (b.type == "click") {
+                c.visibility = "hidden"
+            }
+        }
+    },
+    iecompattest: function () {
+        return (document.compatMode && document.compatMode != "BackCompat") ? document.documentElement : document.body
+    },
+    clearbrowseredge: function (e, c) {
+        var b = 0;
+        if (c == "rightedge") {
+            var d = this.ie && !window.opera ? this.standardbody.scrollLeft + this.standardbody.clientWidth - 15 : window.pageXOffset + window.innerWidth - 15;
+            this.dropmenuobj.contentmeasure = this.dropmenuobj.offsetWidth;
+            if (d - this.dropmenuobj.x < this.dropmenuobj.contentmeasure) {
+                b = this.dropmenuobj.contentmeasure - e.offsetWidth
+            }
+        } else {
+            var a = this.ie && !window.opera ? this.standardbody.scrollTop : window.pageYOffset;
+            var d = this.ie && !window.opera ? this.standardbody.scrollTop + this.standardbody.clientHeight - 15 : window.pageYOffset + window.innerHeight - 18;
+            this.dropmenuobj.contentmeasure = this.dropmenuobj.offsetHeight;
+            if (d - this.dropmenuobj.y < this.dropmenuobj.contentmeasure) {
+                b = this.dropmenuobj.contentmeasure + e.offsetHeight;
+                if ((this.dropmenuobj.y - a) < this.dropmenuobj.contentmeasure) {
+                    b = this.dropmenuobj.y + e.offsetHeight - a
+                }
+            }
+            this.dropmenuobj.firstlink.style.borderTopWidth = (b == 0) ? 0 : "1px"
+        }
+        return b
+    },
+    dropit: function (c, b, a) {
+        if (this.dropmenuobj != null) {
+            this.dropmenuobj.style.visibility = "hidden";
+            if (this.previousmenuitem != null && this.previousmenuitem != c) {
+                if (this.previousmenuitem.parentNode.className.indexOf("default") == -1) {
+                    this.previousmenuitem.parentNode.className = ""
+                }
+            }
+        }
+        this.clearhidemenu();
+        if (this.ie || this.firefox) {
+            c.onmouseout = function () {
+                clickdropdown.delayhidemenu(c)
+            };
+            this.dropmenuobj = document.getElementById(a);
+            this.dropmenuobj.onmouseover = function () {
+                clickdropdown.clearhidemenu()
+            };
+            this.dropmenuobj.onmouseout = function (d) {
+                clickdropdown.dynamichide(d, c)
+            };
+            this.dropmenuobj.onclick = function () {
+                clickdropdown.delayhidemenu(c)
+            };
+            this.showhide(this.dropmenuobj.style, b, c);
+            this.dropmenuobj.x = this.getposOffset(c, "left");
+            this.dropmenuobj.y = this.getposOffset(c, "top");
+            this.dropmenuobj.style.left = this.dropmenuobj.x - this.clearbrowseredge(c, "rightedge") + "px";
+            this.dropmenuobj.style.top = this.dropmenuobj.y - this.clearbrowseredge(c, "bottomedge") + c.offsetHeight + 1 + "px";
+            this.previousmenuitem = c;
+            this.positionshim()
+        }
+    },
+    contains_firefox: function (d, c) {
+        while (c.parentNode) {
+            if ((c = c.parentNode) == d) {
+                return true
+            }
+        }
+        return false
+    },
+    dynamichide: function (c, b) {
+        var a = window.event ? window.event : c;
+        if (this.ie && !this.dropmenuobj.contains(a.toElement)) {
+            this.delayhidemenu(b)
+        } else {
+            if (this.firefox && c.currentTarget != a.relatedTarget && !this.contains_firefox(a.currentTarget, a.relatedTarget)) {
+                this.delayhidemenu(b)
+            }
+        }
+    },
+    delayhidemenu: function (a) {
+        this.delayhide = setTimeout(function () {
+            clickdropdown.dropmenuobj.style.visibility = "hidden";
+            if (a.parentNode.className.indexOf("default") == -1) {
+                a.parentNode.className = ""
+            }
+        }, this.disappeardelay)
+    },
+    clearhidemenu: function () {
+        if (this.delayhide != "undefined") {
+            clearTimeout(this.delayhide)
+        }
+    },
+    positionshim: function () {
+        if (this.enableiframeshim && typeof this.shimobject != "undefined") {
+            if (this.dropmenuobj.style.visibility == "visible") {
+                this.shimobject.style.width = this.dropmenuobj.offsetWidth + "px";
+                this.shimobject.style.height = this.dropmenuobj.offsetHeight + "px";
+                this.shimobject.style.left = this.dropmenuobj.style.left;
+                this.shimobject.style.top = this.dropmenuobj.style.top
+            }
+            this.shimobject.style.display = (this.dropmenuobj.style.visibility == "visible") ? "block" : "none"
+        }
+    },
+    hideshim: function () {
+        if (this.enableiframeshim && typeof this.shimobject != "undefined") {
+            this.shimobject.style.display = "none"
+        }
+    },
+    isSelected: function (a) {
+        var a = a.replace("http://" + a.hostname, "").replace(/^\//, "");
+        return (clickdropdown.currentpageurl == a)
+    },
+    init: function (e, c) {
+        this.standardbody = (document.compatMode == "CSS1Compat") ? document.documentElement : document.body;
+        var f = document.getElementById(e).getElementsByTagName("a");
+        for (var d = 0; d < f.length; d++) {
+            if (f[d].getAttribute("rel")) {
+                var a = f[d].getAttribute("rel");
+                document.getElementById(a).firstlink = document.getElementById(a).getElementsByTagName("a")[0];
+                f[d].onclick = function (h) {
+                    var g = typeof h != "undefined" ? h : window.event;
+                    clickdropdown.dropit(this, g, this.getAttribute("rel"));
+                    return false
+                }
+            }
+            if (c == "auto" && typeof b == "undefined" && this.isSelected(f[d].href)) {
+                f[d].parentNode.className += " selected default";
+                var b = true
+            } else {
+                if (parseInt(c) == d) {
+                    f[d].parentNode.className += " selected default"
+                }
+            }
+        }
+    }
+};

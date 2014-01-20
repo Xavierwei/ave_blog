@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<#ZC_BLOG_LANGUAGE#>" lang="<#ZC_BLOG_LANGUAGE#>">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta http-equiv="Content-Language" content="<#ZC_BLOG_LANGUAGE#>" />
+	<title><#ZC_BLOG_TITLE#><#ZC_MSG044#><#BlogTitle#></title>
+	<meta name="viewport" content="width=device-width, minimum-scale=0.5, maximum-scale=2.0" />
+	<script src="<#ZC_BLOG_HOST#>script/common.js" type="text/javascript"></script>
+	<link rel="stylesheet" type="text/css" href="<#ZC_BLOG_HOST#>/CSS/V2default.css" media="all" />
+	<meta name="generator" content="Z-Blog <#ZC_BLOG_VERSION#>" />
+	<link rel="stylesheet" rev="stylesheet" href="<#ZC_BLOG_HOST#>themes/<#ZC_BLOG_THEME#>/source/style.css.asp" type="text/css" media="screen" />
+	<link rel="alternate" type="application/rss+xml" href="/feed.asp?cmt=<#article/id#>" title="Comments Feed for <#article/title#>" />
+	<script src="<#ZC_BLOG_HOST#>script/common.js" type="text/javascript"></script>
+	<script src="<#ZC_BLOG_HOST#>function/c_html_js_add.asp" type="text/javascript"></script>
+	<script src="<#ZC_BLOG_HOST#>SCRIPT/HashMap.js" type="text/javascript"></script>
+	<script type="text/javascript" src="<#ZC_BLOG_HOST#>themes/<#ZC_BLOG_THEME#>/script/AddAvatarForAdmin.js" ></script>
+	<link rel="stylesheet" type="text/css" href="<#ZC_BLOG_HOST#>THEMES/avene/STYLE/default.css" />
+	<link rel="stylesheet" type="text/css" href="<#ZC_BLOG_HOST#>THEMES/avene/STYLE/jquery.fancybox.css" />
+	<link rel="stylesheet" type="text/css" href="<#ZC_BLOG_HOST#>THEMES/avene/STYLE/style_v3.css" />
+	<script src="<#ZC_BLOG_HOST#>THEMES/avene/TEMPLATE/script/encodeToGb2312.js" type="text/javascript"></script>
+	<script src="<#ZC_BLOG_HOST#>THEMES/avene/TEMPLATE/script/sso.js" type="text/javascript"></script>
+	<script src="<#ZC_BLOG_HOST#>THEMES/avene/TEMPLATE/script/avene-all-min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="<#ZC_BLOG_HOST#>themes/<#ZC_BLOG_THEME#>/script/modernizr-2.5.3.min.js" ></script> 
+	<script type="text/javascript" src="<#ZC_BLOG_HOST#>themes/<#ZC_BLOG_THEME#>/script/jquery-1.8.3.min.js" ></script>  
+	<script type="text/javascript" src="<#ZC_BLOG_HOST#>themes/<#ZC_BLOG_THEME#>/script/jquery.bxslider.js" ></script>
+	<script type="text/javascript" src="<#ZC_BLOG_HOST#>themes/<#ZC_BLOG_THEME#>/script/jquery.fancybox.pack.js" ></script>
+	<script type="text/javascript" src="<#ZC_BLOG_HOST#>themes/<#ZC_BLOG_THEME#>/script/sidebar.js" ></script>
+</head>
+<body class="single cate<#article/category/id#>">
+<#CACHE_INCLUDE_GLOBALHEADER_HTML#> 
+<div id="divAll">
+	<div id="divPage">
+    <div id="clear"></div> 
+	<!--页面顶部共用信息代码 起始-->
+	<!--页面顶部共用信息代码 结束-->
+	<#CACHE_INCLUDE_TOPNAV_HTML#>
+	<div id="divMiddle">
+		<div id="divMain"> 
+			<#template:article-single#>
+		</div>
+		<div id="divSidebar">
+			<#CACHE_INCLUDE_SIDEPANEL#>
+		</div>
+	</div>
+	</div>
+	<div class="clear"></div>
+</div>
+<!-- Google Analytics code start -->
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        _uacct = "UA-20215586-2";
+        urchinTracker();
+    </script>
+    <!-- Google Analytics code end --->
+<#CACHE_INCLUDE_FOOTER_HTML#>
+</body>
+</html>
+<!-- <#BLOG_CREATE_TIME#> -->

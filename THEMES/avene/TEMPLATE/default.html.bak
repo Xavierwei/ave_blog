@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<#ZC_BLOG_LANGUAGE#>" lang="<#ZC_BLOG_LANGUAGE#>">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta http-equiv="Content-Language" content="<#ZC_BLOG_LANGUAGE#>" />
+	<title><#ZC_BLOG_TITLE#><#ZC_MSG044#><#BlogTitle#></title>
+	<meta name="viewport" content="width=device-width, minimum-scale=0.5, maximum-scale=2.0" />
+	<meta name="generator" content="Z-Blog <#ZC_BLOG_VERSION#>" />
+	<link rel="stylesheet" rev="stylesheet" href="<#ZC_BLOG_HOST#>themes/<#ZC_BLOG_THEME#>/source/style.css.asp" type="text/css" media="screen" />
+	<link rel="alternate" type="application/rss+xml" href="<#ZC_BLOG_HOST#>rss.xml" title="<#ZC_BLOG_TITLE#>" />
+	<link rel="stylesheet" type="text/css" href="<#ZC_BLOG_HOST#>CSS/V2default.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="<#ZC_BLOG_HOST#>THEMES/avene/STYLE/default.css" />
+	<link rel="stylesheet" type="text/css" href="<#ZC_BLOG_HOST#>THEMES/avene/STYLE/style_v3.css" />
+	<script src="<#ZC_BLOG_HOST#>script/common.js" type="text/javascript"></script>
+	<script src="<#ZC_BLOG_HOST#>function/c_html_js_add.asp" type="text/javascript"></script>
+	<script src="<#ZC_BLOG_HOST#>THEMES/avene/TEMPLATE/script/encodeToGb2312.js" type="text/javascript"></script>
+	<script src="<#ZC_BLOG_HOST#>THEMES/avene/TEMPLATE/script/sso.js" type="text/javascript"></script>
+	<script src="<#ZC_BLOG_HOST#>THEMES/avene/TEMPLATE/script/avene-all-min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="<#ZC_BLOG_HOST#>themes/<#ZC_BLOG_THEME#>/script/jquery-1.8.3.min.js" ></script>  
+	<script type="text/javascript" src="<#ZC_BLOG_HOST#>themes/<#ZC_BLOG_THEME#>/script/jquery.bxslider.js" ></script>
+	<script type="text/javascript" src="<#ZC_BLOG_HOST#>themes/<#ZC_BLOG_THEME#>/script/sidebar.js" ></script>
+</head>
+<body class="multi default">
+<#CACHE_INCLUDE_GLOBALHEADER#>
+<#CACHE_INCLUDE_TOPBANNER#> 
+<div id="divAll">
+	<div id="divPage">
+    <div id="clear"></div>
+	<#CACHE_INCLUDE_TOPNAV#>
+	<div id="divMiddle">
+		<div class="homeCategoryList cate_15">
+			<div class="homeCategoryListTitle"><span class="thumbnail"><img src="<#ZC_BLOG_HOST#>IMAGE/THUMBNAIL/thumbnail1.jpg" /></span><span class="title">护肤保养专家</span><a href="<#ZC_BLOG_HOST#>catalog.asp?cate=15">更多文章</a></div>
+			<ul>
+				<#CACHE_INCLUDE_CATEGORY_15_HTML#>
+			</ul>
+			<div class="homeCategoryListFooter"></div>
+		</div>
+
+		<div class="homeCategoryList cate_16">
+			<div class="homeCategoryListTitle"><span class="thumbnail"><img src="<#ZC_BLOG_HOST#>IMAGE/THUMBNAIL/thumbnail2.jpg" /></span><span class="title">雅漾美肌日志</span><a href="<#ZC_BLOG_HOST#>catalog.asp?cate=16">更多文章</a></div>
+			<ul>
+				<#CACHE_INCLUDE_CATEGORY_16_HTML#>
+			</ul>
+			<div class="homeCategoryListFooter"></div> 
+		</div>
+
+		<div class="homeCategoryList cate_17">
+			<div class="homeCategoryListTitle"><span class="thumbnail"><img src="<#ZC_BLOG_HOST#>IMAGE/THUMBNAIL/thumbnail3.jpg" /></span><span class="title">皮肤学专家</span><a href="<#ZC_BLOG_HOST#>catalog.asp?cate=17">更多文章</a></div>
+			<ul>
+				<#CACHE_INCLUDE_CATEGORY_17_HTML#>
+			</ul>
+			<div class="homeCategoryListFooter"></div>
+		</div>
+
+		<div class="homeCategoryList cate_18">
+			<div class="homeCategoryListTitle"><span class="thumbnail"><img src="<#ZC_BLOG_HOST#>IMAGE/THUMBNAIL/thumbnail4.jpg" /></span><span class="title">注册国际营养师</span><a href="<#ZC_BLOG_HOST#>catalog.asp?cate=18">更多文章</a></div>
+			<ul> 
+				<#CACHE_INCLUDE_CATEGORY_18_HTML#>
+			</ul>
+			<div class="homeCategoryListFooter"></div>
+		</div>		
+	</div>
+	</div>
+</div>
+	<!-- Google Analytics code start -->
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        _uacct = "UA-20215586-2";
+        urchinTracker();
+    </script>
+
+    <!-- Google Analytics code end --->
+<#CACHE_INCLUDE_FOOTER#>
+</body>
+</html>

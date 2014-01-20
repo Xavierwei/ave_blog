@@ -1,0 +1,265 @@
+@charset "utf-8";
+/* CSS Document */
+
+.otherleft14px{
+	height:40px;
+	line-height:40px;
+	margin:0px;
+	text-indent:14px;
+	font-size:14px;
+	font-weight:bold;
+}
+.otherleft14pxleft{
+	float:left;
+	width:300px;
+	margin:25px 0 0 0;
+	padding:0px;
+	text-align:left;
+	line-height:24px;
+}
+.otherleft14pxright{
+	float:left;
+	width: 439px;
+	margin:25px 0 0 0;
+	padding: 0px;
+	text-align: right;
+	line-height:24px;
+}
+
+#functiontable{
+	width:754px;
+	margin: 0 0 0 14px;
+	padding: 0px;
+}
+#functiontable ul,li{
+	list-style:none;
+}
+#functiontabletitle{	
+	font-weight:bold;
+}
+.functiontableline{
+	height:1px;
+	line-height:1px;
+}
+.space20px{
+	clear:both;	
+	
+	height:20px;
+}
+.licenter{
+	float:left;
+	width:739px;
+	height:24px;
+	text-align:center;
+	margin: 10px 0 15px 0;
+	padding: 0px;	
+}
+
+.739line{
+	float: left;
+	width:739px;	
+	height:auto;
+}
+.739line ul,li{
+	list-style:none;
+}
+.739half{
+	float: left;
+	width: 360px;
+	overflow:hidden;
+	position: relative;
+}
+.739half ul,li{
+	list-style:none;	
+}
+.mediapic{
+	width: 145px;
+	height:190px;
+}
+.mediapicsmall{
+	width: 102px;
+	height:132px;
+}
+.mediawording{
+	width: 215px;
+	line-height:24px;
+}
+.mediapicbig{
+	float: left;
+	width:737px;
+	height:630px;
+	overflow:scroll;
+}
+.prizepic{
+	float:left;
+	width: 145px;
+	height:177px;
+}
+.prizewording{
+	float:left;
+	width: 594px;
+	line-height:24px;
+}
+.megpic{
+	width: 159px;
+	height:195px;
+}
+.megwording{
+	width: 580px;
+	line-height:36px;
+}
+
+.megpicsmall{
+	width: 130px;
+	height:152px;
+}
+.megsmallwording{
+	width: 230px;
+	line-height:22px;
+}
+.mapline789{
+	float:left;
+	width:761px;
+	height:auto;
+	margin-top:20px;
+	padding: 0 0 0 28px;
+	}
+	
+.mapline789 ul,li{
+	list-style:none;
+	float:left;
+	margin:0px;
+	padding:0px;
+	}
+.mapleft{
+	width:160px;
+	height:auto;
+	padding:0 16px 0 0;
+	line-height:18px;
+}
+.mapright{
+	float:right;
+	width:585px;
+	height:auto;
+}
+.professionalleft{
+	float:left;
+	width:136px;
+	padding: 0 20px 0 0;
+	height:186px;
+}
+.professionalright{
+	float:right;
+	width:581px;
+	height:14px;
+	padding: 15px 0 15px 0;
+	margin:0px;
+	line-height:24px;
+}
+.introductionleft{
+	width:39px;
+	line-height:24px;
+	padding: 0 0 0 1px;
+	}
+.introductionright{
+	width:541px;
+	line-height:24px;
+	}
+.professionalwordingleft{
+	width:68px;
+	line-height:24px;
+	padding: 0 0 0 1px;
+	}
+.professionalwordingright{
+	width:668px;
+	line-height:24px;
+	}
+.professionalpicsmall{
+	width:98px;
+	}
+.professionalpicsmallwording{
+	width:134px;
+	height:102px;
+	line-height:24px;
+	padding-right:8px;
+	}
+.specialforheli{
+	width:134px;
+	height:128px;
+	line-height:24px;
+	padding-right:8px;
+}
+
+	.his-cont{width:680px;height:334px;background:url(../images/aboutavene/avenecn-history-bg.jpg) no-repeat;float:left;position:relative;}
+	#yeardisc,.yearlist{position:absolute;}
+	#yeardisc{left:6px;top:14px;}
+	.yearlist{left:20px;top:278px;}
+	.yearlist a{width:45px;height:30px;display:block;float:left;text-indent:-1000em;margin-left:20px;}
+		.year-avene{background:url(../images/aboutavene/avenecn-his-year.gif) -45px 0 no-repeat; }
+		.year-1736{background:url(../images/aboutavene/avenecn-his-year.gif)  -45px -30px no-repeat;}
+		.year-1743{background:url(../images/aboutavene/avenecn-his-year.gif)  -45px -60px no-repeat;}
+		.year-1826{background:url(../images/aboutavene/avenecn-his-year.gif)  -45px -90px no-repeat;}
+		.year-1871{background:url(../images/aboutavene/avenecn-his-year.gif)  -45px -120px no-repeat;}
+		.year-1874{background:url(../images/aboutavene/avenecn-his-year.gif)  -45px -150px no-repeat;}
+		.year-1975{background:url(../images/aboutavene/avenecn-his-year.gif)  -45px -180px no-repeat;}
+		.year-1990{background:url(../images/aboutavene/avenecn-his-year.gif)  -45px -210px no-repeat;}
+		.year-2005{background:url(../images/aboutavene/avenecn-his-year.gif)  -45px -240px no-repeat;}
+		.year-avene-sel{background:url(../images/aboutavene/avenecn-his-year.gif) 0 0 no-repeat;}
+		.year-1736-sel{background:url(../images/aboutavene/avenecn-his-year.gif)  0 -30px no-repeat;}
+		.year-1743-sel{background:url(../images/aboutavene/avenecn-his-year.gif)  0 -60px no-repeat;}
+		.year-1826-sel{background:url(../images/aboutavene/avenecn-his-year.gif)  0 -90px no-repeat;}
+		.year-1871-sel{background:url(../images/aboutavene/avenecn-his-year.gif)  0 -120px no-repeat;}
+		.year-1874-sel{background:url(../images/aboutavene/avenecn-his-year.gif)  0 -150px no-repeat;}
+		.year-1975-sel{background:url(../images/aboutavene/avenecn-his-year.gif)  0 -180px no-repeat;}
+		.year-1990-sel{background:url(../images/aboutavene/avenecn-his-year.gif)  0 -210px no-repeat;}
+		.year-2005-sel{background:url(../images/aboutavene/avenecn-his-year.gif)  0 -240px no-repeat;}
+#avene1rightwordinga{
+	float:right;
+	width:200px;
+	line-height:24px;
+	}
+#avene1rightwordingb{
+	float:left;
+	width:505px;
+	line-height:24px;
+	margin:0 0 10px 0;
+	}
+#avene1rightwordingc{
+	float:left;
+	width:300px;
+	line-height:24px;
+	margin:15px 0 0 0;
+	padding: 0 9px 0 0;
+	}
+#avene1table{
+	float:left;
+	width:505px;
+	height:172px;
+	background:url(../images/aboutavene/table.gif) no-repeat;
+	margin:10px 0;
+	}
+#avene1table ul,li{
+	list-style: none;
+}
+.avene1tablel1left1{
+	width:323px;
+	padding:5px 0 0 2px;
+}
+.avene1tablel1right1{
+	width:180px;
+	padding-top:5px;
+}
+.specialitalicwording{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	font-style:italic;
+	font-weight:bold;
+	color:#fc6e6e;
+	}
+#avene2table{
+	float:left;
+	width:505px;
+	height:210px;
+	background:url(../images/aboutavene/bg.jpg) no-repeat;
+	margin:10px 0;
+	}

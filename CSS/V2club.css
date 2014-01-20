@@ -1,0 +1,41 @@
+@charset "utf-8";
+/* CSS Document */
+
+.clubad{
+	height: 217px;
+	margin:0px;
+	padding:0px;
+}
+.clubtitle{
+	height: 36px;
+	margin:0px;
+	padding:0px;
+}
+.clubredtitle{
+	color:#fc6e6e; 
+	font-size:14px; 
+	font-weight:bold;
+	height: 26px;
+	margin:0px;
+	padding:0px;
+}
+.clubcontent{
+	margin: 0px;
+	padding: 0px;
+	
+	}
+.registerinput{
+	color:#8e8e8e; 
+	font-size:12px; 
+	width:204px;
+    border: 1px solid #8e8e8e; 
+	}
+.registerinputspe{
+	color:#8e8e8e; 
+	font-size:12px; 
+	width:102px;
+    border: 1px solid #ccc; 
+	}
+.registerlistmenu{
+	color:#8e8e8e;
+	}

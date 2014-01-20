@@ -1,0 +1,10 @@
+<div class="topBanner">
+<div class="topBannerWrap">
+	<ul class="topBannerSlider">
+		<li><img src="<#ZC_BLOG_HOST#>/IMAGE/BANNER/1.jpg" /></li>
+		<li><img src="<#ZC_BLOG_HOST#>/IMAGE/BANNER/2.jpg" /></li>
+		<li><img src="<#ZC_BLOG_HOST#>/IMAGE/BANNER/3.jpg" /></li>
+		<li><img src="<#ZC_BLOG_HOST#>/IMAGE/BANNER/4.jpg" /></li>
+	</ul>
+</div>
+</div>

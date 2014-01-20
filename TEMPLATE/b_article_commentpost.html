@@ -1,0 +1,41 @@
+﻿<div class="post" id="divCommentPost">
+  <p class="posttop"><a name="comment"><#ZC_MSG024#>:</a></p>
+  <form id="frmSumbit" target="_self" method="post" action="<#article/commentposturl#>" >
+    <input type="hidden" name="inpId" id="inpId" value="<#article/id#>" />
+    <input type="hidden" name="inpArticle" id="inpArticle" value="" />
+    <input type="hidden" name="inpLocation" id="inpLocation" value="" />
+    <table border="0" cellspacing="5" cellpadding="0">
+	 <tr>
+	 	<td width="210" align="right"><label for="inpName"><#ZC_MSG001#>(*)</label></td>
+		<td><input type="text" name="inpName" id="inpName" class="textII" value="" size="28" tabindex="1" /></td>
+		<td width="100" align="right"><label for="inpEmail"><#ZC_MSG053#></label></td>
+		<td><input type="text" name="inpEmail" id="inpEmail" class="textII" value="" size="28" tabindex="2" /></td>
+	 </tr>
+	 <tr>
+	 	<td align="right"><label for="inpHomePage"><acronym title="Please input your website url." lang="en"><#ZC_MSG054#></acronym></label></td>
+	 	<td colspan="3"><input type="text" name="inpHomePage" id="inpHomePage" class="textII" value="" size="28" tabindex="3" /></td>
+	 </tr>
+	 <tr>
+	   <td><!--<label for="txaArticle"><#ZC_MSG055#>(*)(<#ZC_MSG056#>:<#ZC_CONTENT_MAX#>)</label>--></td>
+	   <td colspan="3"><textarea name="txaArticle" id="txaArticle" onchange="GetActiveText(this.id);" onclick="GetActiveText(this.id);" onfocus="GetActiveText(this.id);" class="textII" cols="40" rows="4" tabindex="5" ></textarea></td>
+      </tr>
+	  <tr>
+	  <td></td>
+	   <td height="60" colspan="3" valign="middle"><input name="btnSumbit" type="submit" tabindex="6" value="<#ZC_MSG087#>" onclick="JavaScript:return VerifyMessage()" class="buttonII" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	   <input name="btnReset" type="reset" tabindex="7" value="<#ZC_MSG088#>" class="buttonII" /></td>
+      </tr>
+	</table>
+
+    <#template:article_commentpost-verify#>
+
+      <!--
+      <input type="checkbox" name="chkRemember" value="1" id="chkRemember" />
+      <label for="chkRemember"><#ZC_MSG049#></label>
+   -->
+    <!--
+	<script language="JavaScript" type="text/javascript">objActive="txaArticle";ExportUbbFrame();</script>
+	-->
+  </form>
+  <!--<p class="postbottom"><#ZC_MSG040#></p>
+  <script language="JavaScript" type="text/javascript">LoadRememberInfo();</script>-->
+</div>

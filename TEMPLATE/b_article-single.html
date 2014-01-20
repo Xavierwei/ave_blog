@@ -1,0 +1,34 @@
+﻿<div class="post cate<#article/category/id#> auth<#article/author/id#>">
+	<!--
+	<div class="post-nav"><#template:article_navbar_l#><#template:article_navbar_r#></div>-->
+	<h2 class="post-title"><#article/title#></h2>
+	<div class="post-body"><#article/content#></div>
+		
+	<h5 class="post-tags"><span><#ZC_MSG138#></span>: <#template:article_tag#></h5>
+	<div class="divClear"></div>
+	 <div class="post-item">
+	<h4 class="post-date">[<span><#article/posttime#></span><span><#ZC_MSG011#>:</span><span><#article/author/name#></span>]</h4>
+	<h6 class="post-footer">
+		<span class="post-class"><#article/category/name#></span>|<span><#ZC_MSG013#>(<#article/commnums#>)</span>|<!--<span><#ZC_MSG014#>(<#article/trackbacknums#>)</span>|--><span><#ZC_MSG130#>(<span id="spn<#article/id#>" class="hitnum"></span>)</span>
+      <script language="JavaScript" type="text/javascript">strBatchCount+="spn<#article/id#>=<#article/id#>,"</script>
+	</h6>
+	</div>
+</div>
+<!--
+<ul class="msg trackback">
+	<li class="tbname"><a href="<#article/pretrackback_url#>" target="_blank"><#ZC_MSG232#></a></li>
+</ul>
+
+<ul class="msg mutuality">
+	<li class="tbname"><#ZC_MSG231#>:</li>
+	<li class="msgarticle"><#template:article_mutuality#></li>
+</ul>
+<#template:article_trackback#>
+-->
+<div class="divClear"></div>
+<div class="boxTitle"><#ZC_MSG267#></div>
+<div class="divClear"></div>
+<div>
+<#template:article_comment#>
+</div>
+<#template:article_commentpost#>
